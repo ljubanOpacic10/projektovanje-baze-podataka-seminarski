@@ -1,0 +1,100 @@
+<h1>Kada (ne) treba normalizovati</h1>
+
+<h2>Povezivanje sa prethodnom lekcijom</h2>
+U prethodnoj lekciji upoznali smo se sa normalnim formama i videli kako se kroz 1NF, 2NF i 3NF rešavaju problemi kao što su redundantnost podataka i anomalije. Naučili smo da normalizacija pomaže da baza bude pravilno organizovana i da podaci budu konzistentni.
+
+Međutim, postavlja se važno pitanje: da li uvek treba primeniti potpunu normalizaciju ili postoje situacije kada to nije najbolje rešenje?
+
+<h2>Uvođenje kroz pitanje ili problem</h2>
+Na prvi pogled može delovati da je cilj uvek dovesti bazu do treće normalne forme ili čak dalje. Međutim, u praksi stvari nisu uvek tako jednostavne. Iako normalizacija donosi brojne prednosti, ona može imati i određene posledice koje utiču na performanse i složenost sistema.
+
+Kada normalizujemo bazu, često razdvajamo podatke u veći broj tabela. Na primer, podatke o učenicima, predmetima i profesorima razdvajamo u posebne tabele i povezujemo ih pomoću stranih ključeva. Ovo smanjuje ponavljanje podataka i eliminiše anomalije, ali istovremeno znači da ćemo za dobijanje kompletne informacije morati da spajamo više tabela.
+
+Razmisli o sledećem: ako želimo da prikažemo sve ocene jednog učenika zajedno sa nazivima predmeta i imenima profesora, moraćemo da povežemo više tabela. Što je više tabela uključeno, to upit postaje složeniji i može zahtevati više vremena za izvršavanje.
+
+<h2>Objašnjenje</h2>
+Upravo zbog toga u nekim situacijama odlučujemo da ne primenimo potpunu normalizaciju. Ovaj pristup se naziva denormalizacija. Denormalizacija znači da svesno uvodimo određeni stepen redundantnosti kako bismo pojednostavili rad sa podacima i poboljšali performanse.
+
+Na primer, možemo odlučiti da u tabeli Ocena čuvamo i naziv predmeta, iako se on već nalazi u tabeli Predmet. Na taj način izbegavamo dodatno povezivanje tabela prilikom čitanja podataka. Međutim, time preuzimamo odgovornost da vodimo računa o ažuriranju tog podatka na više mesta.
+
+Važno je razumeti da denormalizacija nije greška, već svesna odluka koja se donosi na osnovu potreba sistema. Ako sistem često čita podatke i zahteva brze odgovore, denormalizacija može biti korisna. Sa druge strane, ako je važnija tačnost i konzistentnost podataka, onda je bolje držati se normalizovanog modela.
+
+U informacionom sistemu za školu, u fazi projektovanja baze, uglavnom težimo normalizaciji kako bismo dobili jasan i ispravan model. Tek kasnije, kada sistem počne da se koristi i kada znamo kako se podaci najčešće koriste, možemo razmotriti eventualnu denormalizaciju.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Pristup</th>
+			<th>Prednost</th>
+			<th>Mogući nedostatak</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Normalizacija</td>
+			<td>Smanjuje redundantnost i poboljšava konzistentnost podataka</td>
+			<td>Zahteva više tabela i složenije upite</td>
+		</tr>
+		<tr>
+			<td>Denormalizacija</td>
+			<td>Može ubrzati čitanje podataka i pojednostaviti neke upite</td>
+			<td>Uvodi ponavljanje podataka i veći rizik od nekonzistentnosti</td>
+		</tr>
+	</tbody>
+</table>
+
+Učenici često prave grešku tako što pokušavaju da optimizuju bazu prerano. Na primer, mogu pokušati da spoje više tabela u jednu kako bi pojednostavili model, ali time zapravo uvode probleme koje smo ranije opisali. Zato je važno prvo napraviti ispravan model, a tek onda razmišljati o optimizaciji.
+
+Ako ti je teško da odlučiš kada treba normalizovati, a kada ne, možeš se voditi sledećim pravilom: u početku uvek teži normalizaciji, jer ona obezbeđuje dobar temelj. Denormalizaciju uvodiš samo kada postoji jasan razlog, kao što su performanse ili specifični zahtevi sistema.
+
+Razmisli o sledećem: šta je važnije u datom sistemu, brzina ili tačnost? Koliko često se podaci menjaju? Koliko često se čitaju? Odgovori na ova pitanja pomoći će ti da doneseš ispravnu odluku.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Situacija iz školskog sistema</th>
+			<th>Bolji izbor</th>
+			<th>Zašto</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Čuvanje osnovnih podataka o učenicima, predmetima i profesorima</td>
+			<td>Normalizacija</td>
+			<td>Važno je da podaci budu tačni, bez dupliranja i lakši za održavanje</td>
+		</tr>
+		<tr>
+			<td>Brz prikaz izveštaja sa ocenama, predmetima i profesorima</td>
+			<td>Moguća denormalizacija</td>
+			<td>Ako se podaci uglavnom čitaju, a retko menjaju, može se ubrzati prikaz rezultata</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Podsticanje razmišljanja</h2>
+Šta bi se desilo ako bismo odmah na početku projekta spojili više tabela samo da bismo imali manje povezivanja u upitima?
+
+Kako bismo procenili da li je u nekom sistemu važnija brzina rada ili konzistentnost podataka?
+
+Da li bi denormalizacija bila dobra odluka u sistemu gde se podaci često menjaju?
+
+<div class="napomena">
+Nemoj mešati denormalizaciju sa lošim dizajnom. Loš dizajn nastaje kada se tabele nepravilno naprave bez jasnog razloga. Denormalizacija je svesna odluka koja se donosi tek kada već imamo dobar, normalizovan model i jasan razlog da ga delimično prilagodimo.
+
+Zato je u učenju baza podataka najbolje prvo savladati pravila normalizacije. Tek kada razumeš kako izgleda ispravan model, možeš pravilno proceniti kada vredi napraviti kompromis.
+</div>
+
+<h2>Najava sledeće lekcije</h2>
+Razumevanje kada treba, a kada ne treba normalizovati, predstavlja važan korak ka praktičnom radu sa bazama podataka. U realnim sistemima često je potrebno pronaći balans između teorijski ispravnog modela i praktičnih zahteva.
+
+U narednoj lekciji ćemo preći na praktičan rad i upoznati se sa osnovama SQL jezika, koji koristimo za rad sa bazama podataka.
+
+<div class="zadatak">
+Razmisli o informacionom sistemu za školu i odgovori na sledeća pitanja:
+
+* navedi jedan primer gde je bolje koristiti normalizaciju i objasni zašto
+* navedi jedan primer gde bi denormalizacija mogla biti korisna
+* objasni koje probleme može doneti denormalizacija
+
+Pokušaj da svoje odgovore povežeš sa konkretnim situacijama iz sistema.
+</div>

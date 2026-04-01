@@ -1,0 +1,95 @@
+<h1>Relacione baze - osnovna ideja (tabele, redovi, kolone)</h1>
+
+U prethodnoj lekciji upoznali smo pojam baze podataka i videli zašto su baze važne i gde se koriste. Naučili smo da baza podataka služi za organizovano čuvanje podataka kako bismo mogli lako da ih pretražujemo i menjamo.
+
+Sada se postavlja novo pitanje: kako su ti podaci organizovani unutar baze i kako baza zna gde se koji podatak nalazi?
+
+<h2>Uvod kroz problem</h2>
+Zamisli da u informacionom sistemu škole treba da pronađeš sve učenike iz odeljenja II2. Kako bi podaci morali da budu raspoređeni da bi pretraga bila brza i jasna?
+
+Jedan od najčešćih načina organizacije podataka su relacione baze podataka. One organizuju podatke u obliku tabela. Ovaj način je intuitivan, jer podseća na tabele koje već koristimo u svesci ili u Excel-u.
+
+<h2>Tabele, redovi i kolone</h2>
+Posmatrajmo ponovo primer škole. Želimo da čuvamo podatke o učenicima. Možemo napraviti tabelu u kojoj svaki red predstavlja jednog učenika, a svaka kolona jednu informaciju o tom učeniku.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Ime</th>
+			<th>Prezime</th>
+			<th>Razred</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Marko</td>
+			<td>Marković</td>
+			<td>I1</td>
+		</tr>
+		<tr>
+			<td>Ana</td>
+			<td>Petrović</td>
+			<td>II2</td>
+		</tr>
+	</tbody>
+</table>
+
+U ovom primeru vidimo osnovne elemente relacione baze podataka.
+
+Tabela je skup podataka o jednoj vrsti objekata, na primer o učenicima, predmetima ili profesorima.
+
+Red je jedan konkretan zapis. U tabeli učenika, jedan red predstavlja jednog učenika.
+
+Kolona je jedna osobina tog objekta. Na primer, ime, prezime i razred su kolone.
+
+Važno pravilo: u jednoj koloni treba da bude isti tip informacije. U koloni Ime treba da budu samo imena, a u koloni Razred samo oznake razreda. Tako podaci ostaju uredni i konzistentni.
+
+<h2>Više tabela u jednoj bazi</h2>
+Školski sistem ne čini samo tabela učenika. Možemo imati i tabelu predmeta, kao i tabelu ocena.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Tabela</th>
+			<th>Primer kolona</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Učenik</td>
+			<td>Ime, Prezime, Razred</td>
+		</tr>
+		<tr>
+			<td>Predmet</td>
+			<td>NazivPredmeta, Profesor</td>
+		</tr>
+		<tr>
+			<td>Ocena</td>
+			<td>Učenik, Predmet, Ocena</td>
+		</tr>
+	</tbody>
+</table>
+
+Na prvi pogled deluje jednostavno da sve čuvamo u jednoj velikoj tabeli. Ali to brzo vodi problemima: podaci se ponavljaju, tabela postaje nepregledna, a održavanje teško.
+
+Zato relacione baze koriste više tabela koje su međusobno povezane. Svaka tabela ima svoju ulogu i čuva određenu vrstu podataka.
+
+<h2>Podsticanje razmišljanja</h2>
+Šta bi se desilo ako bismo u jednu tabelu ubacili i učenike, i predmete, i ocene?
+
+Kako bismo rešili problem kada jedan učenik ima više predmeta i više ocena?
+
+Da li je lakše održavati jednu ogromnu tabelu ili više manjih tabela koje imaju jasnu namenu?
+
+<div class="napomena">
+Učenici često mešaju pojmove red i kolona, ili tabelu i bazu podataka. Zapamti: baza podataka je skup tabela, tabela je organizovana struktura podataka, red je jedan zapis, a kolona jedna osobina zapisa. Česta zabuna je i poređenje sa Excel-om: iako liče, relacione baze imaju stroga pravila organizacije i povezivanja podataka, pa su pouzdanije za složene sisteme.
+</div>
+
+<h2>Šta je najvažnije da zapamtiš</h2>
+Najvažnija ideja ove lekcije je da se podaci u relacijskim bazama organizuju u tabele, redove i kolone, a više povezanih tabela zajedno čine bazu podataka.
+
+U narednoj lekciji ćemo uzeti jedan konkretan primer iz realnog sveta, kao što je školski sistem ili online prodavnica, i detaljnije ćemo ga razložiti na delove kako bismo videli koje podatke treba čuvati i kako ih organizovati.
+
+<div class="zadatak">
+Zamisli da praviš bazu podataka za jednu online prodavnicu. Napiši koje bi tabele bile potrebne. Pokušaj da navedeš najmanje tri tabele i za svaku od njih napiši koje kolone bi sadržala. Na primer, tabela proizvoda može imati naziv, cenu i količinu na stanju.
+</div>

@@ -1,0 +1,88 @@
+<h1>Anomalije (insert, update, delete)</h1>
+
+U prethodnoj lekciji upoznali smo se sa funkcionalnim zavisnostima i naučili kako atributi u jednoj tabeli mogu zavisiti jedni od drugih. Videli smo da funkcionalne zavisnosti opisuju pravila sistema i pomažu nam da razumemo strukturu podataka.
+
+Sada ćemo napraviti sledeći korak i videti šta se dešava kada tabela nije dobro organizovana u skladu sa tim zavisnostima.
+
+<h2>Uvod</h2>
+Kada struktura tabele nije pravilno definisana, mogu se javiti različiti problemi prilikom rada sa podacima. Ove probleme nazivamo anomalije. Najčešće se javljaju tri vrste anomalija: anomalija umetanja (insert), anomalija ažuriranja (update) i anomalija brisanja (delete).
+
+Da bismo ove probleme lakše razumeli, posmatrajmo jednu loše organizovanu tabelu u informacionom sistemu za školu. Zamislimo da imamo jednu tabelu u kojoj čuvamo sledeće podatke: id_ucenik, ime_ucenika, naziv_predmeta, ime_profesora i ocena. U ovoj tabeli su pomešani podaci o učenicima, predmetima i profesorima.
+
+Na prvi pogled, ova tabela deluje praktično jer sve informacije imamo na jednom mestu. Međutim, ovakav dizajn dovodi do ozbiljnih problema.
+
+<h2>Objašnjenje</h2>
+Prvi problem je anomalija umetanja. Zamislimo da želimo da dodamo novi predmet u sistem, ali još uvek nema nijednog učenika koji ga pohađa. U našoj tabeli ne možemo dodati predmet bez učenika, jer su svi podaci povezani u jednom redu. To znači da ne možemo uneti podatke o predmetu dok ne postoji i učenik, što predstavlja problem.
+
+Drugi problem je anomalija ažuriranja. Zamislimo da profesor promeni ime ili da se promeni naziv predmeta. Pošto se ti podaci pojavljuju u više redova, morali bismo da ih promenimo na svim mestima gde se pojavljuju. Ako zaboravimo da ažuriramo neki red, dobijamo nekonzistentne podatke.
+
+Treći problem je anomalija brisanja. Zamislimo da izbrišemo poslednji red koji sadrži podatke o nekom predmetu. Time ne bismo izgubili samo informaciju o oceni, već i informaciju o samom predmetu i profesoru. To znači da brisanjem jednog podatka nenamerno brišemo i druge važne podatke.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Vrsta anomalije</th>
+			<th>Šta se dešava</th>
+			<th>Primer iz školskog sistema</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Insert</td>
+			<td>Ne možemo uneti jedan podatak bez drugog</td>
+			<td>Novi predmet ne može da se unese bez učenika</td>
+		</tr>
+		<tr>
+			<td>Update</td>
+			<td>Isti podatak mora da se menja na više mesta</td>
+			<td>Promena imena profesora u više redova</td>
+		</tr>
+		<tr>
+			<td>Delete</td>
+			<td>Brisanjem jednog reda gubimo i druge informacije</td>
+			<td>Brisanje poslednje ocene briše i podatke o predmetu</td>
+		</tr>
+	</tbody>
+</table>
+
+Svi ovi problemi nastaju zbog toga što tabela ne prati pravilno funkcionalne zavisnosti. Da bismo to bolje razumeli, potrebno je da uvedemo nekoliko važnih pojmova vezanih za vrste funkcionalnih zavisnosti.
+
+Potpuna funkcionalna zavisnost znači da atribut u potpunosti zavisi od celog ključa, a ne od njegovog dela. Ovo je poželjna situacija jer znači da su podaci pravilno organizovani.
+
+Delimična funkcionalna zavisnost nastaje kada atribut zavisi samo od dela složenog ključa. Ovo je znak lošeg dizajna jer znači da se podaci mogu razdvojiti u više tabela kako bi se izbeglo ponavljanje.
+
+Tranzitivna funkcionalna zavisnost postoji kada jedan atribut zavisi od drugog atributa koji dalje zavisi od ključa. Na primer, ako id_predmet određuje naziv_predmeta, a naziv_predmeta određuje ime_profesora, onda imamo tranzitivnu zavisnost. Ovo takođe može dovesti do problema u tabeli.
+
+Trivijalna funkcionalna zavisnost je ona koja je uvek tačna, na primer kada atribut zavisi sam od sebe. Ova vrsta zavisnosti nije problematična, ali nije ni posebno korisna za analizu strukture baze.
+
+Razmisli o sledećem: u tabeli koju smo opisali, da li svi atributi zavise direktno od primarnog ključa? Ili postoje atributi koji zavise jedni od drugih? Upravo takve situacije dovode do anomalija.
+
+<h2>Podsticanje razmišljanja</h2>
+Šta bi se desilo ako bismo i dalje sve podatke o učenicima, predmetima i profesorima držali u jednoj tabeli?
+
+Kako bismo znali da u tabeli postoji delimična zavisnost, a kada postoji tranzitivna zavisnost?
+
+Kako anomalije utiču na tačnost podataka kada više korisnika radi sa bazom u isto vreme?
+
+<div class="napomena">
+Učenici često prave grešku tako što pokušavaju da sve podatke smeste u jednu tabelu jer im to deluje jednostavnije. Međutim, takav pristup dovodi do problema koje smo opisali. Važno je razumeti da dobra organizacija podataka sprečava ove anomalije i čini sistem pouzdanim.
+
+Ako ti je teško da prepoznaš anomalije, pokušaj da zamisliš konkretne operacije nad podacima. Šta se dešava kada dodaješ novi podatak? Šta kada menjaš postojeći? Šta kada brišeš podatak? Ako bilo koja od ovih operacija dovodi do problema ili neželjenih posledica, verovatno postoji loš dizajn tabele.
+</div>
+
+<h2>Zaključak</h2>
+Razumevanje anomalija je ključno jer nam pokazuje zašto je potrebno dalje unapređivati strukturu baze. Upravo zbog ovih problema uvodimo normalizaciju, koja nam pomaže da organizujemo podatke na pravilan način.
+
+U narednoj lekciji ćemo se baviti prvom normalnom formom i videti kako možemo da započnemo proces ispravljanja ovih problema.
+
+<div class="zadatak">
+Posmatraj tabelu koja sadrži sledeće atribute:
+id_ucenik, ime_ucenika, naziv_predmeta, ime_profesora, ocena
+
+* opiši jedan primer anomalije umetanja
+* opiši jedan primer anomalije ažuriranja
+* opiši jedan primer anomalije brisanja
+* pokušaj da prepoznaš da li postoji delimična ili tranzitivna zavisnost u ovoj tabeli
+
+Objasni svoje odgovore na konkretnim primerima.
+</div>

@@ -1,0 +1,120 @@
+<h1>Normalne forme (1NF, 2NF, 3NF)</h1>
+
+U prethodnoj lekciji upoznali smo se sa anomalijama koje nastaju u loše organizovanim tabelama i videli kako nepravilno definisane funkcionalne zavisnosti dovode do problema prilikom umetanja, ažuriranja i brisanja podataka.
+
+Sada ćemo videti kako se ovi problemi rešavaju kroz proces koji se naziva normalizacija.
+
+<h2>Uvod</h2>
+Normalizacija je postupak organizovanja podataka u tabelama tako da se smanji redundantnost i eliminišu anomalije. Ovaj proces se sprovodi kroz niz pravila koja nazivamo normalne forme. U ovoj lekciji fokusiraćemo se na prve tri normalne forme: prvu (1NF), drugu (2NF) i treću (3NF).
+
+Kako da prepoznamo da tabela nije dobro organizovana i kojim redom treba da je popravljamo?
+
+<h2>Objašnjenje</h2>
+Prva normalna forma (1NF) postavlja najosnovniji skup pravila za organizovanu bazu podataka: eliminisanje ponovljenih kolona u istoj tabeli, pravljenje posebnih tabela za svaku grupu podataka koji su u relaciji i identifikovanje svakog reda pomoću posebne kolone ili skupa kolona, odnosno primarnog ključa. To znači da svaka kolona sadrži nedeljive vrednosti i da nema ponavljajućih grupa podataka. Drugim rečima, u jednoj koloni ne smeju se nalaziti liste ili skupovi vrednosti.
+
+Zamislimo da u informacionom sistemu za školu imamo tabelu u kojoj se za jednog učenika čuvaju svi predmeti koje pohađa u jednoj koloni, kao lista vrednosti. Ovakva tabela nije u prvoj normalnoj formi jer jedna kolona sadrži više vrednosti. Da bismo zadovoljili 1NF, potrebno je da svaka vrednost bude zapisana u posebnom redu. Time se podaci razdvajaju i postaju pregledniji.
+
+Na ovaj način rešavamo deo problema koji može dovesti do anomalija umetanja i ažuriranja, jer više nemamo složene i nejasne strukture unutar jedne kolone.
+
+Druga normalna forma (2NF) nadovezuje se na prvu i dodatno zahteva da svi atributi u tabeli potpuno funkcionalno zavise od primarnog ključa. Ovo je posebno važno kada tabela ima složen primarni ključ.
+
+Ako neki atribut zavisi samo od dela ključa, tada imamo delimičnu funkcionalnu zavisnost, što predstavlja problem. Na primer, ako u tabeli koja povezuje učenike i predmete čuvamo i ime učenika, tada ime učenika zavisi samo od identifikatora učenika, a ne od celog ključa koji uključuje i predmet. Ovo znači da tabela nije u drugoj normalnoj formi.
+
+Rešenje ovog problema je razdvajanje tabele. Podaci o učeniku se izdvajaju u posebnu tabelu Učenik, a tabela koja povezuje učenike i predmete zadržava samo one atribute koji zavise od celog ključa. Na ovaj način eliminišemo delimične zavisnosti i smanjujemo redundantnost.
+
+Ovim korakom rešavamo anomalije ažuriranja i brisanja koje su nastajale zbog ponavljanja podataka u više redova.
+
+Treća normalna forma (3NF) dodatno unapređuje strukturu tako što uklanja tranzitivne funkcionalne zavisnosti. Tranzitivna zavisnost postoji kada atribut zavisi od drugog atributa koji dalje zavisi od primarnog ključa.
+
+Na primer, recimo da imamo tabelu Učenik koja sadrži kolonu za odeljenje i kolonu za ime razrednog starešine. Ako ime razrednog starešine zavisi od odeljenja, a kolona odeljenje čuva referencu na tabelu Odeljenje, onda imamo tranzitivnu zavisnost. Ovo znači da tabela nije u trećoj normalnoj formi.
+Rešenje je da se podaci o razrednom starešini izdvoje u posebnu tabelu Odeljenje, koja će imati svoj primarni ključ i vezu sa tabelom Učenik. Na taj način uklanjamo tranzitivne zavisnosti i dodatno pojednostavljujemo strukturu baze.
+Na ovaj način rešavamo anomalije koje su nastajale zbog indirektnih zavisnosti između atributa.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Normalna forma</th>
+			<th>Pravilo u jednoj rečenici</th>
+			<th>Koju anomaliju najviše pomaže da reši</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1NF</td>
+			<td>Svaka kolona mora da sadrži samo jednu, nedeljivu vrednost i ne sme biti ponavljajućih grupa podataka.</td>
+			<td>Najčešće smanjuje probleme pri umetanja i ažuriranju podataka.</td>
+		</tr>
+		<tr>
+			<td>2NF</td>
+			<td>Svaki atribut koji nije ključ mora potpuno da zavisi od celog primarnog ključa.</td>
+			<td>Posebno pomaže kod anomalija ažuriranja i brisanja zbog delimičnih zavisnosti.</td>
+		</tr>
+		<tr>
+			<td>3NF</td>
+			<td>Atributi koji nisu ključ ne smeju da zavise od drugih atributa koji nisu ključ, već direktno od ključa.</td>
+			<td>Uklanja anomalije koje nastaju zbog tranzitivnih zavisnosti i nepotrebnog ponavljanja podataka.</td>
+		</tr>
+	</tbody>
+</table>
+
+Ako pogledamo celinu, vidimo da svaka normalna forma rešava određenu vrstu problema. Prva normalna forma uvodi osnovni red i eliminiše složene atribute. Druga normalna forma uklanja delimične zavisnosti i sprečava nepotrebno ponavljanje podataka. Treća normalna forma uklanja tranzitivne zavisnosti i dodatno pojednostavljuje strukturu baze.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Korak</th>
+			<th>Problem</th>
+			<th>Rešenje</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1NF</td>
+			<td>Kreirana je jedna kolona u tabeli Učenik koja sadrži više predmeta za jednog učenika</td>
+			<td>Svaki predmet se zapisuje u posebnom redu u tabeli Predmet</td>
+		</tr>
+		<tr>
+			<td>2NF</td>
+			<td>U tabeli Ocena je kreirana kolona koja čuva ime učenika. Ime učenika zavisi samo od id_ucenik, a ne od celog složenog ključa tabele Ocena</td>
+			<td>Podaci o učeniku se izdvajaju u posebnu tabelu Učenik</td>
+		</tr>
+		<tr>
+			<td>3NF</td>
+			<td>Kolona koja čuva ime razrednog starešine u tabeli učenik, zavisi od odeljenja u kojem je učenik a ne direktno od ključa.</td>
+			<td>Podaci o razrednom starešini se izdvajaju u posebnu tabelu Odeljenje</td>
+		</tr>
+	</tbody>
+</table>
+
+Učenici često pokušavaju da preskoče ove korake i odmah krenu sa implementacijom baze, ali bez razumevanja normalnih formi lako dolazi do grešaka koje smo ranije opisali. Normalizacija nije samo teorija, već praktičan alat koji pomaže da baza bude stabilna, pregledna i laka za održavanje.
+
+Ako ti je teško da razumeš razliku između ovih formi, pokušaj da za svaku tabelu postaviš sledeća pitanja: da li svaka kolona sadrži nedeljive vrednosti i da nema ponavljajućih grupa podataka, da li svi atributi zavise od celog ključa i da li neki atribut zavisi od drugog atributa umesto direktno od ključa. Odgovori na ova pitanja pomoći će ti da odrediš da li tabela zadovoljava određenu normalnu formu.
+
+<h2>Podsticanje razmišljanja</h2>
+Šta bi se desilo ako bismo popravili tabelu tako da zadovolji 1NF, ali bismo ostavili delimične zavisnosti?
+
+Kako bismo prepoznali razliku između delimične i tranzitivne zavisnosti u konkretnom primeru?
+
+Da li je moguće da tabela zadovoljava 2NF, a da i dalje ne zadovoljava 3NF?
+
+<div class="napomena">
+Učenici često misle da je dovoljno samo razdvojiti vrednosti u posebne redove i da je time posao završen. Međutim, 1NF je samo prvi korak. Ako u tabeli i dalje postoje atributi koji zavise od dela ključa ili od drugih atributa, problemi nisu u potpunosti rešeni.
+
+Zato normalizaciju uvek posmatraj kao postepen proces. Prvo proveri 1NF, zatim 2NF, pa tek onda 3NF. Tako ćeš lakše razumeti zašto se tabela menja u svakom koraku.
+</div>
+
+<h2>Zaključak</h2>
+Razumevanje normalnih formi je ključni korak ka pravilnom dizajnu baze podataka. One nam omogućavaju da eliminišemo anomalije i da obezbedimo konzistentnost podataka.
+
+U narednoj lekciji ćemo se baviti situacijama kada nije poželjno primeniti potpunu normalizaciju i videti kada je opravdano napraviti određene kompromise.
+
+<div class="zadatak">
+Posmatraj tabelu koja sadrži sledeće atribute:
+id_ucenik, ime_ucenika, naziv_predmeta, ime_profesora, ocena
+
+* objasni zašto ova tabela nije u prvoj normalnoj formi ako sadrži više vrednosti u jednoj koloni
+* objasni gde postoji delimična funkcionalna zavisnost i kako bi se rešila prelaskom u 2NF
+* objasni gde postoji tranzitivna zavisnost i kako bi se rešila prelaskom u 3NF
+
+Pokušaj da predložiš kako bi izgledale nove tabele nakon normalizacije.
+</div>

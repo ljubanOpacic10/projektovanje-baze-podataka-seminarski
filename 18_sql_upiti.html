@@ -1,0 +1,173 @@
+<h1>Unos i pretraga podataka (INSERT i SELECT)</h1>
+
+U prethodnoj lekciji kreirali smo bazu podataka i tabele za informacioni sistem za školu koristeći SQL Server Management Studio. Definisali smo strukturu baze i uspostavili veze između tabela pomoću primarnih i stranih ključeva. Sada prelazimo na sledeći korak: rad sa podacima.
+
+U ovoj lekciji naučićemo kako da unesemo podatke u tabele i kako da ih pretražujemo pomoću SQL upita. Tek kada u bazi postoje stvarni podaci, možemo zaista da proverimo da li naš sistem radi onako kako smo planirali.
+
+<h2>Zasto su podaci vazni</h2>
+
+Zamisli da imamo napravljene tabele Ucenik, Profesor, Predmet i Ocena, ali da su sve prazne. Da li bismo tada mogli da saznamo koji učenik ima koju ocenu? Ne bismo, jer baza bez podataka ima strukturu, ali nema sadržaj.
+
+Zato je sledeći logičan korak unos podataka. Za unos podataka koristimo SQL komandu INSERT.
+
+<h2>Osnovni oblik INSERT komande</h2>
+
+Osnovni oblik ove komande izgleda ovako:
+
+<xmp class="primer_ta">
+INSERT INTO naziv_tabele (kolona1, kolona2, ...)
+VALUES (vrednost1, vrednost2, ...);
+</xmp>
+
+Važno je da redosled vrednosti odgovara redosledu kolona koje smo naveli. Ako pogrešimo redosled, podaci mogu završiti u pogrešnim kolonama ili komanda neće moći da se izvrši.
+
+<h2>Unos podataka u tabelu Ucenik</h2>
+
+Počnimo od tabele Ucenik. U nju možemo uneti nekoliko primera podataka.
+
+<xmp class="primer_ta">
+INSERT INTO Ucenik (id_ucenik, ime, prezime, razred)
+VALUES (1, 'Marko', 'Markovic', 'I1');
+
+INSERT INTO Ucenik (id_ucenik, ime, prezime, razred)
+VALUES (2, 'Ana', 'Petrovic', 'II2');
+</xmp>
+
+Ovim komandama dodajemo dva reda u tabelu Ucenik. Svaki red predstavlja jednog konkretnog učenika.
+
+<h2>Unos podataka u ostale tabele</h2>
+
+Na isti način možemo uneti podatke i u tabelu Profesor.
+
+<xmp class="primer_ta">
+INSERT INTO Profesor (id_profesor, ime, prezime)
+VALUES (1, 'Jovan', 'Jovanovic');
+
+INSERT INTO Profesor (id_profesor, ime, prezime)
+VALUES (2, 'Milica', 'Ilic');
+</xmp>
+
+Zatim unosimo podatke u tabelu Predmet. Ovde treba obratiti pažnju na strani ključ id_profesor, koji mora odgovarati postojećem profesoru.
+
+<xmp class="primer_ta">
+INSERT INTO Predmet (id_predmet, naziv, id_profesor)
+VALUES (1, 'Matematika', 1);
+
+INSERT INTO Predmet (id_predmet, naziv, id_profesor)
+VALUES (2, 'Informatika', 2);
+</xmp>
+
+Na kraju unosimo podatke u tabelu Ocena. Pošto ova tabela sadrži strane ključeve ka tabelama Ucenik i Predmet, vrednosti koje unosimo moraju već postojati u tim tabelama.
+
+<xmp class="primer_ta">
+INSERT INTO Ocena (id_ocena, vrednost, datum, id_ucenik, id_predmet)
+VALUES (1, 5, '2024-01-15', 1, 1);
+
+INSERT INTO Ocena (id_ocena, vrednost, datum, id_ucenik, id_predmet)
+VALUES (2, 4, '2024-01-20', 2, 2);
+</xmp>
+
+Sada naša baza više nije prazna. U njoj već postoje učenici, profesori, predmeti i ocene, pa možemo da počnemo sa pretragom.
+
+<div class="napomena">Selekcijom upita i klikom na dugme Execute možemo izvršiti komandu. Ovako to izgleda u SQL Server Management Studio:</div>
+<img src="images/insert-komanda-sql.png" alt="" class="img-fluid velicina">
+
+<h2>Osnovni SELECT upit</h2>
+
+Kada unesemo podatke, sledeći korak je da ih pretražimo. Za to koristimo SELECT komandu. Ona nam omogućava da dobijemo podatke iz jedne ili više tabela.
+
+Najjednostavniji oblik SELECT komande je:
+
+<xmp class="primer_ta">
+SELECT * FROM naziv_tabele;
+</xmp>
+
+Zvezdica znači da želimo da prikažemo sve kolone iz tabele. Na primer:
+
+<xmp class="primer_ta">
+SELECT * FROM Ucenik;
+</xmp>
+
+Ova komanda će prikazati sve učenike koje smo uneli.
+
+Ako želimo da prikažemo samo određene kolone, možemo ih navesti:
+
+<xmp class="primer_ta">
+SELECT ime, prezime FROM Ucenik;
+</xmp>
+
+<img src="images/prikaz-select-naredbe.png" alt="" class="img-fluid velicina">
+
+Ova komanda vraća samo imena i prezimena učenika.
+
+<h2>Filtriranje podataka pomocu WHERE</h2>
+
+Ponekad ne želimo da vidimo sve podatke, već samo deo njih. Tada koristimo WHERE.
+
+<xmp class="primer_ta">
+SELECT * FROM Ucenik
+WHERE razred = 'I1';
+</xmp>
+
+Ova komanda vraća samo učenike iz razreda I1.
+
+Razmisli o tome kako bi izgledao upit kojim bismo pronašli samo učenike iz razreda II2. Vidimo da SQL upit zapravo liči na pitanje koje postavljamo bazi.
+
+<h2>Povezivanje tabela pomocu JOIN</h2>
+
+Još jedna veoma važna stvar je povezivanje tabela. Pošto su naše tabele povezane pomoću stranih ključeva, možemo koristiti JOIN da spojimo podatke iz više tabela.
+
+Na primer, možemo prikazati ocene zajedno sa učenikom.
+
+<xmp class="primer_ta">
+SELECT Ucenik.ime, Ucenik.prezime, Ocena.vrednost
+FROM Ucenik
+JOIN Ocena ON Ucenik.id_ucenik = Ocena.id_ucenik;
+</xmp>
+
+Ovaj upit povezuje dve tabele i prikazuje podatke iz obe. Tako dobijamo jasniji odgovor na pitanje ko ima koju ocenu.
+
+Možemo i proširiti upit i uključiti predmet.
+
+<xmp class="primer_ta">
+SELECT Ucenik.ime, Predmet.naziv, Ocena.vrednost
+FROM Ocena
+JOIN Ucenik ON Ocena.id_ucenik = Ucenik.id_ucenik
+JOIN Predmet ON Ocena.id_predmet = Predmet.id_predmet;
+</xmp>
+
+Na ovaj način dobijamo kompletnu informaciju: koji učenik, iz kog predmeta, koju ocenu ima.
+
+<img src="images/prikaz-select-naredbe-sa-join.png" alt="" class="img-fluid velicina">
+
+<h2>Kako da razumes SQL upite</h2>
+
+Ako ti je teško da razumeš SELECT i JOIN, pokušaj da ih povežeš sa pitanjima iz realnog života. Na primer: Koji učenici imaju ocene? Koju ocenu ima učenik iz određenog predmeta? SQL upiti su zapravo način da takva pitanja postavimo bazi podataka.
+
+Kada to shvatiš, upiti više ne deluju kao komplikovane komande, već kao jasan način da dođeš do informacije koja ti je potrebna.
+
+<div class="napomena">
+Ucenici cesto prave nekoliko gresaka. Jedna od najcescih je da pokusaju da unesu podatke u tabelu koja zavisi od druge tabele pre nego sto unesu osnovne podatke. Na primer, pokusavaju da unesu ocenu pre nego sto postoji ucenik ili predmet. Druga cesta greska je netacno napisan JOIN uslov, zbog cega rezultat ne odgovara pitanju koje smo postavili. Zato je vazno da uvek proveris da li strani kljucevi odgovaraju postojecim podacima i da li je uslov povezivanja ispravno napisan.
+</div>
+
+<h2>Zasto je ovo vazan korak</h2>
+
+Razumevanje unosa i pretrage podataka je ključni korak jer sada baza postaje funkcionalna. Više ne radimo samo sa strukturom, već i sa stvarnim podacima. To znači da naš model škole sada možemo da koristimo za konkretna pitanja i konkretne odgovore.
+
+Šta bi se desilo ako bismo imali puno podataka, a ne bismo znali da napišemo dobar SELECT upit? Podaci bi postojali, ali ne bismo umeli da dođemo do informacije koja nam je potrebna. Zato su INSERT i SELECT osnova praktičnog rada sa bazom.
+
+<h2>Sta sledi dalje</h2>
+
+U narednoj završnoj lekciji ćemo definisati zadatak koji možeš uraditi kao što smo mi kroz ove lekcije prolazili kroz primere za inforamcioni sistem za školu. To će biti prilika da samostalno primeniš sve što si naučio i da proveriš svoje znanje.
+
+<div class="zadatak">
+Unesi najmanje tri učenika u tabelu Ucenik.
+
+Unesi najmanje dva predmeta i dva profesora.
+
+Unesi nekoliko ocena koje povezuju učenike i predmete.
+
+Napiši SELECT upit koji prikazuje ime učenika, naziv predmeta i ocenu.
+
+Pokušaj da samostalno napišeš sve komande i proveri rezultate u SSMS-u.
+</div>

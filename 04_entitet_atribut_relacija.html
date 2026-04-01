@@ -1,0 +1,101 @@
+<h1>Osnovni pojmovi: entitet, atribut, relacija</h1>
+
+<h2>Povezivanje sa prethodnom lekcijom</h2>
+U prethodnoj lekciji analizirali smo školski sistem i identifikovali osnovne celine koje postoje u njemu, kao što su učenici, profesori, predmeti i ocene. Videli smo da je pre nego što počnemo sa pravljenjem baze podataka važno da razumemo šta sve postoji u sistemu i koje informacije želimo da čuvamo.
+
+Sada je vreme da te celine koje smo uočili opišemo preciznije i uvedemo osnovne pojmove koji se koriste u projektovanju baza podataka.
+
+<h2>Šta su entiteti?</h2>
+Kada govorimo o stvarima koje postoje u sistemu, kao što su učenici ili predmeti, koristimo pojam entitet. Entitet predstavlja bilo koji objekat iz realnog sveta o kome želimo da čuvamo podatke.
+
+U našem primeru škole, učenik je entitet jer želimo da znamo njegove podatke, kao što su ime, prezime i razred. Isto važi i za profesora ili predmet.
+
+Važno je da entitet ne bude nešto proizvoljno, već nešto što ima smisla u okviru sistema koji posmatramo. Ako ne postoji potreba da o nečemu čuvamo podatke, onda to verovatno nije entitet u našem modelu. Na primer, ako u našem sistemu ne pratimo učionice, onda učionica nije entitet u toj bazi.
+
+<h2>Atributi - osobine entiteta</h2>
+Svaki entitet ima svoje osobine, odnosno podatke koje želimo da zabeležimo. Te osobine nazivamo atributi. Atributi opisuju entitet i daju nam konkretne informacije o njemu.
+
+Za entitet učenik, atributi mogu biti:
+- Ime
+- Prezime
+- Razred
+- Datum rođenja
+
+Za entitet predmet, atribut može biti naziv predmeta.
+
+Razmisli o sledećem: ako imamo entitet učenik, da li je dovoljno da znamo samo ime? Verovatno nije, jer može postojati više učenika sa istim imenom. Zato koristimo više atributa kako bismo preciznije opisali svaki entitet.
+
+<h2>Relacije - veze između entiteta</h2>
+Pored entiteta i atributa, postoji još jedan važan pojam, a to je relacija. Relacija opisuje vezu između dva ili više entiteta.
+
+U našem školskom sistemu:
+- Učenik pohađa predmet
+- Profesor predaje predmet
+- Učenik dobija ocenu iz predmeta
+
+Sve su to primeri relacija.
+
+Na primer, relacija između učenika i predmeta može se opisati rečenicom: "učenik sluša predmet". Ova relacija nam govori da postoji povezanost između ta dva entiteta. Slično tome, relacija između profesora i predmeta može biti: "profesor predaje predmet".
+
+<h2>Poseban primer: ocena kao relacija</h2>
+Posebno zanimljiv primer je ocena. Kao što smo ranije pomenuli, ocena ne postoji sama za sebe. Ona uvek povezuje učenika i predmet. To znači da je ocena zapravo deo relacije između ta dva entiteta.
+
+Ovo će nam kasnije biti veoma važno kada budemo pravili modele baze.
+
+<h2>Zaključak</h2>
+U ovom trenutku je važno da jasno razlikuješ ova tri pojma:
+
+Entitet je ono o čemu čuvamo podatke.
+Atributi su osobine tog entiteta.
+Relacija je veza između entiteta.
+
+Ako pokušaš da svaki element u našem školskom sistemu svrstaš u jednu od ove tri kategorije, videćeš da stvari postaju mnogo jasnije.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Pojam</th>
+			<th>Opis</th>
+			<th>Primer</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Entitet</td>
+			<td>Objekat o kojem čuvamo podatke</td>
+			<td>Učenik, Profesor, Predmet</td>
+		</tr>
+		<tr>
+			<td>Atribut</td>
+			<td>Svojstvo entiteta</td>
+			<td>Ime, Prezime, Razred</td>
+		</tr>
+		<tr>
+			<td>Relacija</td>
+			<td>Veza između entiteta</td>
+			<td>Učenik sluša predmet</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Česte greške</h2>
+<div class="napomena">
+Učenici često prave grešku tako što mešaju entitet i atribut. Na primer, mogu pomisliti da je "ime učenika" entitet, ali to nije tačno. Entitet je učenik, a ime je atribut tog entiteta.
+
+Slično tome, relacija nije isto što i entitet. Relacija opisuje kako su entiteti povezani, a ne predstavlja sam objekat.
+</div>
+
+<h2>Zašto je ovo važno?</h2>
+Ovi pojmovi su osnova za sve što ćemo raditi dalje. Kada ih dobro razumeš, biće ti mnogo lakše da razumeš kako se prave dijagrami i kako se podaci organizuju u bazi.
+
+U narednoj lekciji ćemo se baviti ključevima, odnosno naučićemo kako da jednoznačno identifikujemo svaki zapis u tabeli i kako povezujemo podatke između različitih tabela.
+
+<div class="zadatak">
+U okviru školskog sistema navedi:
+
+1. Najmanje tri entiteta
+2. Za svaki entitet napiši bar tri atributa
+3. Navedi bar dve relacije između entiteta i opiši ih rečenicom
+
+Pokušaj da jasno razdvojiš šta je entitet, šta atribut, a šta relacija.
+</div>

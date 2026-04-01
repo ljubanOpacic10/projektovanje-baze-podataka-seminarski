@@ -1,0 +1,123 @@
+<h1>Zavrsni projekat i dalji koraci u ucenju</h1>
+
+U prethodnim lekcijama prosli smo kroz ceo proces projektovanja relacione baze podataka. Poceli smo od razumevanja problema iz realnog sveta, zatim smo definisali tipove entiteta, atribute i relacije, crtali ER dijagram, analizirali kardinalnost i opcionalnost, preveli model u tabele, bavili se funkcionalnim zavisnostima i normalizacijom, a na kraju implementirali bazu i radili sa podacima pomocu SQL-a.
+
+U ovoj zavrsnoj lekciji cilj je da sve to primenis kroz jedan samostalan projekat. Kroz ovaj zadatak procices sve korake koje smo ucili i steci jasnu sliku kako izgleda kompletan proces projektovanja baze podataka.
+
+<h2>Opis sistema za projekat</h2>
+
+Zamisli sledeci realan sistem.
+
+U pitanju je sistem za upravljanje sportskim centrom. U tom centru postoje razlicite aktivnosti koje korisnici mogu pohadjati, kao sto su teretana, grupni treninzi ili sportske sekcije. Svaki korisnik moze da se prijavi na jednu ili vise aktivnosti. Svaka aktivnost ima svog trenera koji je zaduzen za njen rad. Trener moze voditi vise aktivnosti.
+
+Korisnici imaju svoje profile sa osnovnim podacima. Kada se korisnik prijavi na neku aktivnost, evidentira se njegova prijava. Takodje, moze se pratiti kada je korisnik prisustvovao treningu i eventualno dodatne informacije vezane za tu aktivnost.
+
+Ovaj opis predstavlja realan sistem, ali nije formalno modelovan. Tvoj zadatak je da na osnovu ovog opisa prepoznas koje su kljucne celine sistema, koje podatke treba cuvati i kako su ti delovi medjusobno povezani.
+
+<h2>Kako da zapocnes analizu</h2>
+
+Vazno je da obratis paznju na sledece: koji objekti postoje u sistemu, koje informacije o njima treba cuvati i kako su medjusobno povezani kroz aktivnosti koje se desavaju u sistemu. Nemoj odmah razmisljati o tabelama, vec prvo analiziraj sistem na nacin na koji smo to radili kroz kurs.
+
+Sta bi se desilo ako odmah krenes sa pisanjem SQL komandi, bez analize? Vrlo verovatno bi kasnije morao da menjas veliki deo modela. Zato je redosled rada veoma vazan.
+
+<h2>Koraci koje treba da pratis</h2>
+
+Nakon analize sistema, prati sledece korake.
+
+Prvi korak je identifikacija tipova entiteta i njihovih atributa. Na osnovu opisa sistema izdvoji osnovne celine i za svaku od njih definisi koje podatke treba cuvati.
+
+Drugi korak je definisanje relacija izmedju tipova entiteta. Razmisli kako su te celine povezane i odredi tip relacije, kao i kardinalnost i opcionalnost.
+
+Treci korak je crtanje ER dijagrama. Predstavi sve tipove entiteta, njihove atribute i poveznike izmedju njih. Obrati paznju na jasnocu i tacnost dijagrama.
+
+Cetvrti korak je prevodjenje ER dijagrama u relacioni model. Definisi tabele, kolone, primarne kljuceve i strane kljuceve.
+
+Peti korak je provera funkcionalnih zavisnosti i normalizacija. Analiziraj da li postoje delimicne ili tranzitivne zavisnosti i ispravi strukturu tabele ako je potrebno.
+
+Sesti korak je implementacija baze pomocu SQL-a. U SQL Server Management Studio kreiraj bazu i sve tabele koje si definisao.
+
+Sedmi korak je unos podataka i pisanje upita. Unesi nekoliko primera podataka i napisi SQL upite koji prikazuju smislen rezultat, na primer prikaz svih korisnika i aktivnosti koje pohadjaju.
+
+<h2>Primer organizacije projekta</h2>
+
+Da bi ti bilo lakse da strukturiras rad, mozes napraviti jednostavan plan rada.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Faza</th>
+			<th>Sta radis</th>
+			<th>Rezultat</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Analiza</td>
+			<td>Izdvajas entitete, atribute i procese</td>
+			<td>Spisak kljucnih celina sistema</td>
+		</tr>
+		<tr>
+			<td>Modelovanje</td>
+			<td>Crtas ER dijagram i definises relacije</td>
+			<td>Jasan model sistema</td>
+		</tr>
+		<tr>
+			<td>Implementacija</td>
+			<td>Kreiras bazu i tabele u SQL Server-u</td>
+			<td>Funkcionalna struktura baze</td>
+		</tr>
+		<tr>
+			<td>Testiranje</td>
+			<td>Unosis podatke i pises upite</td>
+			<td>Provera da model radi u praksi</td>
+		</tr>
+	</tbody>
+</table>
+
+U ovom projektu nije cilj samo da dobijes tacan rezultat, vec da razumes svaki korak procesa. Ako negde napravis gresku, pokusaj da je pronadjes i ispravis, jer je to deo ucenja.
+
+<div class="napomena">
+Ucenici cesto prave gresku tako sto preskoce fazu analize i odmah krenu sa pisanjem SQL koda. Time gube jasnu strukturu i dolaze do problema kasnije. Najbolji pristup je da pratis redosled koraka koje smo ucili: analiza, modelovanje, prevod u tabele, normalizacija, pa tek onda implementacija i upiti.
+</div>
+
+<h2>Dalji koraci u ucenju</h2>
+
+Kroz ovaj kurs obradili smo osnovne koncepte relacionih baza podataka, ali ovo je tek pocetak. Baze podataka su siroka oblast i postoji mnogo tema koje nismo detaljno obradili, kao sto su optimizacija upita, indeksi, transakcije, bezbednost i rad sa velikim sistemima.
+
+Ako zelis da produbis znanje, sledeci koraci mogu biti:
+
+Ucenje naprednijih SQL upita, kao sto su agregatne funkcije, grupisanje podataka i slozeniji JOIN izrazi.
+
+Rad na backend projektima, gde baza podataka postaje deo veceg sistema. U takvim projektima koristices programske jezike kao sto su C#, Java ili JavaScript za komunikaciju sa bazom.
+
+Upoznavanje sa ORM alatima koji omogucavaju rad sa bazom kroz programski kod umesto direktnog pisanja SQL-a.
+
+Razumevanje kako se baze koriste u web aplikacijama i kako se povezuju sa korisnickim interfejsom.
+
+Za vezbanje SQL-a mozes koristiti online platforme koje nude interaktivne zadatke. Jedan od primera je SQL Island, gde kroz resavanje problema ucis kako da pises upite. Takodje postoje i drugi sajtovi sa zadacima i vezbama koji ti mogu pomoci da steknes rutinu.
+
+Pored toga, korisno je koristiti SQL cheat sheet dokumente koji sadrze pregled najvaznijih komandi i sintakse. Takvi materijali mogu ti pomoci dok ucis i radis zadatke.
+
+Razmisli o sledecem: kako bi izgledao kompletan informacioni sistem koji koristi bazu podataka koju si napravio? Kako bi korisnici komunicirali sa tim sistemom? Ova pitanja te uvode u naredni nivo razvoja softvera.
+
+Ovaj kurs ti je dao osnovu za razumevanje kako se podaci organizuju i kako se sa njima radi. Dalji napredak zavisi od vezbe i rada na konkretnim projektima.
+
+<h2>Sta sledi dalje</h2>
+
+U narednoj lekciji cemo uraditi rekapitulaciju kursa kroz pregled najvaznijih koraka, tipicnih gresaka i preporuka za samostalni rad na novim projektima.
+
+<div class="zadatak">
+Na osnovu opisa sistema sportskog centra identifikuj tipove entiteta i njihove atribute.
+
+Definisi relacije izmedju tipova entiteta i njihovu kardinalnost i opcionalnost.
+
+Nacrtaj ER dijagram.
+
+Prevedi model u tabele i definisi kljuceve.
+
+Implementiraj bazu u SQL Server-u.
+
+Unesi primer podataka i napisi najmanje dva SQL upita.
+
+Pokusaj da kroz ovaj zadatak primenis sve sto si naucio tokom kursa.
+</div>

@@ -1,0 +1,165 @@
+<h1>Primarni i strani ključevi</h1>
+
+U prethodnoj lekciji upoznali smo osnovne pojmove: entitet, atribut i relacija. Naučili smo kako da prepoznamo šta u sistemu predstavlja entitet, koje su njegove osobine i kako su različiti entiteti međusobno povezani.
+
+Sada se javlja jedno veoma važno pitanje: kako možemo tačno da razlikujemo pojedinačne zapise u tabeli i kako povezujemo podatke između različitih tabela?
+
+<h2>Problem: kako razlikovati zapise?</h2>
+Zamisli ponovo tabelu učenika. U toj tabeli imamo kolone kao što su ime, prezime i razred. Ako imamo dva učenika sa istim imenom i prezimenom, kako ćemo ih razlikovati?
+
+Kako ćemo biti sigurni da tačno znamo na kog učenika se odnosi određena ocena ili informacija? Potreban nam je način da svaki zapis u tabeli bude jedinstveno prepoznatljiv.
+
+<h2>Primarni ključ</h2>
+Za to koristimo primarni ključ. Primarni ključ je atribut (ili skup atributa) koji jednoznačno identifikuje svaki red u tabeli. To znači da nijedna dva reda ne mogu imati istu vrednost primarnog ključa.
+
+U tabeli učenika često se uvodi poseban atribut, na primer ID učenika. Svaki učenik dobija jedinstveni broj koji ga razlikuje od svih ostalih. Bez obzira na to da li dva učenika imaju isto ime i prezime, njihov ID će uvek biti različit.
+
+Na taj način možemo uvek tačno znati o kom učeniku govorimo.
+
+Važno je razumeti da primarni ključ mora biti jedinstven i da ne sme imati prazne vrednosti. Ako bi postojala dva reda sa istim ključem ili ako bi ključ bio nepoznat, izgubili bismo mogućnost pouzdane identifikacije podataka.
+
+<h2>Problem povezivanja između tabela</h2>
+Sada dolazimo do sledećeg problema. Imamo više tabela, na primer tabelu učenika i tabelu ocena. Kako znamo kojoj osobi pripada određena ocena? Ocena mora biti povezana sa tačno određenim učenikom.
+
+<h2>Strani ključ</h2>
+Ovde uvodimo pojam stranog ključa. Strani ključ je atribut u jednoj tabeli koji se odnosi na primarni ključ u drugoj tabeli. Na taj način povezujemo podatke između tabela.
+
+Na primer, u tabeli ocena možemo imati kolonu koja čuva ID učenika. Ta vrednost predstavlja strani ključ, jer se odnosi na primarni ključ u tabeli učenika. Kada vidimo tu vrednost, znamo tačno kom učeniku pripada određena ocena.
+
+<h2>Primer: tabele sa ključevima</h2>
+
+Tabela učenika sa primarnim ključem:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>IDUčenika (PK)</th>
+			<th>Ime</th>
+			<th>Prezime</th>
+			<th>Razred</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1</td>
+			<td>Marko</td>
+			<td>Marković</td>
+			<td>I1</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>Ana</td>
+			<td>Petrović</td>
+			<td>II2</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>Marko</td>
+			<td>Nikolić</td>
+			<td>I1</td>
+		</tr>
+	</tbody>
+</table>
+
+Tabela predmeta sa primarnim ključem:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>IDPredmeta (PK)</th>
+			<th>NazivPredmeta</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1</td>
+			<td>Matematika</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>Srpski jezik</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>Engleski jezik</td>
+		</tr>
+	</tbody>
+</table>
+
+Tabela ocena sa stranim ključevima:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>IDOcene (PK)</th>
+			<th>IDUčenika (FK)</th>
+			<th>IDPredmeta (FK)</th>
+			<th>Vrednost</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1</td>
+			<td>1</td>
+			<td>1</td>
+			<td>5</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>1</td>
+			<td>2</td>
+			<td>4</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>2</td>
+			<td>1</td>
+			<td>5</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>2</td>
+			<td>3</td>
+			<td>3</td>
+		</tr>
+	</tbody>
+</table>
+
+Napomena: PK označava primarni ključ, FK označava strani ključ.
+
+<h2>Razumevanje veze kroz primere</h2>
+Pogledaj prvi red u tabeli ocena:
+- IDOcene je 1 (primarni ključ u tabeli ocena)
+- IDUčenika je 1 (strani ključ koji se odnosi na Marka Markovića)
+- IDPredmeta je 1 (strani ključ koji se odnosi na Matematiku)
+- Vrednost je 5 (Marko je dobio ocenu 5 iz Matematike)
+
+Na ovaj način, korišćenjem samih brojeva, povezujemo podatke između tabela bez ponavljanja informacija.
+
+<h2>Zašto su strani ključevi važni?</h2>
+Razmisli o sledećem: šta bi se desilo kada ne bismo koristili strane ključeve? Morali bismo u tabeli ocena da upisujemo ime i prezime učenika svaki put. To bi dovelo do ponavljanja podataka i mogućih grešaka.
+
+Na primer, ako se ime napiše različito na dva mesta, dobijamo nekonzistentne podatke. Strani ključevi rešavaju ovaj problem tako što umesto celih podataka čuvamo samo referencu na njih.
+
+<h2>Česte greške</h2>
+<div class="napomena">
+Učenici često prave grešku tako što misle da primarni ključ mora biti nešto značajno, kao što je ime ili JMBG. U praksi se često koristi veštački identifikator, kao što je ID broj, jer je jednostavan i uvek jedinstven.
+
+Takođe, važno je ne mešati primarni i strani ključ. Primarni ključ identifikuje red u svojoj tabeli, dok strani ključ služi za povezivanje sa drugom tabelom.
+</div>
+
+<h2>Povezivanje svih znanja</h2>
+Ako pokušaš da povežeš sve što smo do sada naučili, videćeš da baza podataka postaje mreža povezanih tabela. Primarni ključevi obezbeđuju jedinstvenost podataka, dok strani ključevi omogućavaju da se podaci međusobno povezuju i zajedno čine smislen sistem.
+
+<h2>Šta sledi dalje?</h2>
+U narednoj celini kursa počećemo da koristimo ove pojmove za crtanje ER dijagrama, gde ćemo vizuelno prikazivati entitete, njihove atribute i relacije između njih.
+
+<div class="zadatak">
+Zamisli da imaš dve tabele: Učenik i Ocena.
+
+1. Predloži koji atribut bi bio primarni ključ u tabeli Učenik
+2. Predloži koji atribut bi bio primarni ključ u tabeli Ocena
+3. Objasni koji atribut u tabeli Ocena predstavlja strani ključ i na šta se odnosi
+
+Pokušaj da jasno objasniš kako se ove dve tabele povezuju pomoću ključeva.
+</div>

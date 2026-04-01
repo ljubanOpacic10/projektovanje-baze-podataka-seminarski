@@ -1,0 +1,164 @@
+<h1>Uvod u SQL</h1>
+
+U prethodnoj lekciji govorili smo o tome kada treba, a kada ne treba primeniti normalizaciju. Videli smo da način na koji osmislimo bazu direktno utiče na to kako ćemo kasnije raditi sa podacima. Sada prelazimo na sledeći važan korak: kako da sa bazom zaista komuniciramo.
+
+<h2>Zasto nam je potreban SQL</h2>
+
+Zamisli da škola već ima bazu sa tabelama Ucenik, Nastavnik i Predmet. Kako bismo uneli novog učenika? Kako bismo pronašli sve učenike iz odeljenja I1? Kako bismo izmenili podatak ako učenik pređe u drugo odeljenje?
+
+Za takve zadatke koristimo SQL. SQL je skraćenica od Structured Query Language i predstavlja standardni jezik za rad sa relacijskim bazama podataka. Pomoću njega možemo da kreiramo baze i tabele, unosimo podatke, menjamo ih, brišemo i pretražujemo.
+
+<h2>Gde se SQL koristi</h2>
+
+SQL se koristi u sistemima za upravljanje relacijskim bazama podataka. Takve sisteme nazivamo RDBMS. To su programi koji omogućavaju da pravimo baze, čuvamo podatke i radimo sa njima na organizovan način.
+
+Postoji više poznatih RDBMS rešenja, kao što su MySQL, PostgreSQL, Oracle Database i Microsoft SQL Server. Između njih postoje određene razlike, ali je osnovni SQL veoma sličan, pa znanje koje ovde stekneš možeš kasnije preneti i na druge sisteme.
+
+U ovom kursu koristićemo Microsoft SQL Server i alat SQL Server Management Studio, odnosno SSMS. SSMS je grafički alat u kome možemo da vidimo baze, tabele i da pišemo SQL komande u posebnom prozoru za upite.
+
+Pored relacijskih baza postoje i druge vrste baza podataka, na primer NoSQL baze. One se koriste u nekim posebnim situacijama, ali je u ovom kursu fokus na relacijskim bazama jer imaju jasnu strukturu i odlične su za učenje projektovanja.
+
+<h2>Osnovne grupe SQL komandi</h2>
+
+Kada govorimo o SQL-u, korisno je da razlikujemo nekoliko grupa komandi.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Grupa</th>
+			<th>Cemu sluzi</th>
+			<th>Primeri</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>DDL</td>
+			<td>Definisanje strukture baze i tabela</td>
+			<td>CREATE, ALTER, DROP</td>
+		</tr>
+		<tr>
+			<td>DML</td>
+			<td>Rad sa podacima u tabelama</td>
+			<td>INSERT, UPDATE, DELETE</td>
+		</tr>
+		<tr>
+			<td>DQL</td>
+			<td>Pretraga i prikaz podataka</td>
+			<td>SELECT</td>
+		</tr>
+	</tbody>
+</table>
+
+U ovoj lekciji fokusiraćemo se na prve korake i na osnovne komande koje ćeš najčešće viđati na početku rada sa bazom.
+
+<h2>Prvi koraci u SSMS-u</h2>
+
+Kada pokreneš SQL Server Management Studio, prvi korak je povezivanje sa serverom. Otvara se prozor u kome biraš server i način prijavljivanja. Kada se uspešno povežeš, na ekranu vidiš prikaz servera i postojećih baza podataka.
+
+U narednoj lekciji ćemo detaljnije raditi sa bazom pa ćemo dataljnije proći i kroz potrebne korake za postavljanje SQL Server-a, ali sada ćemo proći kroz osnovne korake kako da kreiramo bazu, tabele i unesemo podatke koristeći SQL komande.
+<h2>Kreiranje baze podataka</h2>
+
+Sledeći korak je kreiranje nove baze podataka. To možemo uraditi preko menija u alatu ili pomoću SQL komande. U ovom kursu fokus je na SQL pristupu, jer tako jasnije razumemo šta se zaista dešava.
+
+<xmp class="primer_ta">
+CREATE DATABASE Skola;
+</xmp>
+
+Ovom komandom pravimo novu bazu podataka pod nazivom Skola.
+
+Kada bazu napravimo, potrebno je da kažemo sistemu da želimo da radimo baš u toj bazi.
+
+<xmp class="primer_ta">
+USE Skola;
+</xmp>
+
+Tek tada naredne komande važe za bazu Skola.
+
+<h2>Kreiranje tabele</h2>
+
+Kao što smo ranije učili, svaka tabela predstavlja jedan tip entiteta iz našeg modela. Ako u sistemu škole želimo da čuvamo podatke o učenicima, pravićemo tabelu Ucenik.
+
+<xmp class="primer_ta">
+CREATE TABLE Ucenik (
+		id_ucenik INT PRIMARY KEY,
+		ime NVARCHAR(50),
+		prezime NVARCHAR(50),
+		razred NVARCHAR(10)
+);
+</xmp>
+
+U ovom primeru navodimo naziv tabele i kolone koje će tabela sadržati. Kolona id_ucenik je primarni ključ, što znači da jednoznačno identifikuje svakog učenika.
+
+Ako se setiš ER modela, ovde možeš lepo da vidiš vezu sa prethodnim lekcijama: entitet Ucenik postaje tabela, atributi postaju kolone, a svaki konkretan učenik biće jedan red u toj tabeli.
+
+<h2>Unos podataka</h2>
+
+Kada tabela postoji, možemo da unesemo prvi red. Na primer, možemo da dodamo jednog učenika.
+
+<xmp class="primer_ta">
+INSERT INTO Ucenik (id_ucenik, ime, prezime, razred)
+VALUES (1, 'Marko', 'Markovic', 'I1');
+</xmp>
+
+Komanda INSERT služi da dodamo nove podatke u tabelu. Prvo navodimo ime tabele i kolone koje popunjavamo, a zatim vrednosti koje unosimo.
+
+<h2>Pretraga podataka</h2>
+
+Ako želimo da vidimo šta se nalazi u tabeli, koristimo komandu SELECT.
+
+<xmp class="primer_ta">
+SELECT * FROM Ucenik;
+</xmp>
+
+Ova komanda prikazuje sve kolone i sve redove iz tabele Ucenik. Zvezdica znači sve. Kasnije ćemo učiti kako da prikažemo samo određene kolone ili samo određene redove.
+
+Šta misliš, kako bismo prikazali samo imena i prezimena učenika, a ne sve podatke? Na to pitanje ćemo se uskoro vratiti.
+
+<h2>Izmena i brisanje podataka</h2>
+
+Podaci u bazi nisu zauvek isti. Nekada je potrebno da ih promenimo, a nekada da ih obrišemo.
+
+Za izmenu koristimo UPDATE.
+
+<xmp class="primer_ta">
+UPDATE Ucenik
+SET razred = 'II1'
+WHERE id_ucenik = 1;
+</xmp>
+
+Ovde menjamo odeljenje učeniku čiji je identifikator 1.
+
+Za brisanje koristimo DELETE.
+
+<xmp class="primer_ta">
+DELETE FROM Ucenik
+WHERE id_ucenik = 1;
+</xmp>
+
+Ovom komandom brišemo red koji pripada učeniku sa identifikatorom 1.
+
+<div class="napomena">
+Ucenici često pokušavaju da nauce SQL komande napamet, bez razumevanja. To nije dobar pristup. Vaznije je da razumes sta komanda radi i nad kojim podacima deluje. Posebno obrati paznju na WHERE uslov kod komandi UPDATE i DELETE, jer ako ga izostavis ili pogresno napises, promena moze obuhvatiti veliki broj redova.
+</div>
+
+<h2>Kako da lakse razumes SQL</h2>
+
+Ako ti je početak težak, poveži svaki deo SQL-a sa onim što već znaš. Tabela odgovara tipu entiteta, red predstavlja jednu pojavu tog entiteta, a kolone predstavljaju atribute. Kada to imaš u glavi, SQL više ne izgleda kao skup nepovezanih komandi, već kao logičan način rada sa modelom koji smo već napravili.
+
+Razmisli i o sledećem: šta bi se desilo ako bismo imali tabelu Predmet, ali ne bismo imali primarni ključ? Kako bismo razlikovali dva predmeta istog naziva? Takva pitanja pomažu da bolje razumeš zašto struktura baze i SQL moraju da rade zajedno.
+
+<h2>Sta sledi dalje</h2>
+
+U narednoj lekciji ćemo detaljnije raditi sa SQL upitima i naučiti kako da preciznije pretražujemo podatke iz tabela.
+
+<div class="zadatak">
+Napisi SQL komandu za kreiranje baze podataka pod nazivom Skola.
+
+Napisi SQL komandu za kreiranje tabele Predmet sa kolonama id_predmet i naziv.
+
+Napisi SQL komandu za unos jednog reda u tabelu Predmet.
+
+Napisi SQL komandu koja prikazuje sve podatke iz tabele Predmet.
+
+Pokusaj da samostalno napises komande i razumes sta svaka od njih radi.
+</div>

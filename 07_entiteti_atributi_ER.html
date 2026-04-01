@@ -1,0 +1,121 @@
+<h1>Entiteti i atributi (tipovi atributa) na ER dijagramu</h1>
+
+U prethodnoj lekciji upoznali smo se sa ER dijagramom i videli zašto je važan u procesu projektovanja baze podataka. Naučili smo da ER dijagram služi kao vizuelni prikaz sistema i da nam pomaže da razumemo kako su podaci organizovani i povezani.
+
+Sada ćemo se fokusirati na njegove osnovne elemente i naučiti kako se entiteti i atributi predstavljaju na dijagramu.
+
+<h2>Entiteti na ER dijagramu</h2>
+Kao što smo već ranije pomenuli, entitet predstavlja objekat iz realnog sveta o kome želimo da čuvamo podatke. U našem školskom sistemu, entiteti su na primer Učenik, Profesor i Predmet.
+
+U ER dijagramu, entiteti se prikazuju kao pravougaonici i obično se označavaju imenom koje jasno opisuje šta predstavljaju.
+
+Zamisli da crtaš dijagram za školu. Ako napišeš Učenik u pravougaoniku, odmah je jasno da taj deo dijagrama predstavlja sve podatke koje želimo da čuvamo o učenicima.
+
+<h2>Atributi na ER dijagramu</h2>
+Međutim, sam entitet nije dovoljan. Potrebno je da znamo i koje informacije čuvamo o njemu. Te informacije nazivamo atributi. Atributi opisuju entitet i predstavljaju njegove osobine.
+
+Na primer, za entitet Učenik atributi mogu biti ime, prezime, razred i datum rođenja.
+
+U ER dijagramu atributi se prikazuju kao elipse koje su povezane sa odgovarajućim entitetom. Na taj način jasno vidimo koje osobine pripadaju kom entitetu. Ovakav prikaz pomaže da struktura sistema bude pregledna i razumljiva.
+
+<h2>Tipovi atributa</h2>
+Do sada smo posmatrali atribute kao jednostavne podatke, ali u praksi postoje različite vrste atributa. Razumevanje ovih razlika pomaže nam da preciznije modelujemo sistem.
+
+<h2>Prosti atributi</h2>
+Jedan od najosnovnijih tipova je prost atribut. To je atribut koji se ne može dalje razložiti na manje delove.
+
+Na primer, razred ili datum rođenja možemo posmatrati kao proste atribute.
+
+<h2>Složeni atributi</h2>
+Sa druge strane, postoje složeni atributi. To su atributi koji se mogu podeliti na više manjih delova.
+
+Na primer, adresa je podatak koji dalje možemo podeliti na Ulicu, Grad i Poštanski broj. U tom slučaju govorimo o složenom atributu.
+
+<h2>Više-vrednosni atributi</h2>
+Postoje i atributi koji mogu imati više vrednosti za jedan entitet. Takve atribute nazivamo više-vrednosni atributi.
+
+Na primer, učenik može imati više brojeva telefona. U tom slučaju, jedan atribut može imati više vrednosti, što zahteva posebnu pažnju prilikom modelovanja.
+
+<h2>Izvedeni atributi</h2>
+Još jedan važan tip atributa je izvedeni atribut. To je atribut čija se vrednost može izračunati na osnovu drugih podataka.
+
+Na primer, ako imamo datum rođenja učenika, možemo izračunati njegov uzrast. U tom slučaju uzrast ne moramo direktno čuvati, već ga možemo dobiti iz postojećih podataka.
+
+<h2>Ključ kao poseban atribut</h2>
+Poseban tip atributa koji smo već spominjali su ključevi, odnosno identifikatori koji se koriste kako bi jedinstveno identifikovali svaki red u nekoj tabeli.
+
+Na primer, ID učenika može biti atribut koji služi da tačno razlikujemo jednog učenika od svih ostalih učenika u sistemu.
+
+<table class="tabela">
+  <thead>
+    <tr>
+      <th>Tip atributa</th>
+      <th>Opis</th>
+      <th>Primer iz školskog sistema</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prost atribut</td>
+      <td>Ne može se dalje deliti</td>
+      <td>Razred</td>
+    </tr>
+    <tr>
+      <td>Složeni atribut</td>
+      <td>Može se podeliti na manje delove</td>
+      <td>Adresa</td>
+    </tr>
+    <tr>
+      <td>Više-vrednosni atribut</td>
+      <td>Može imati više vrednosti</td>
+      <td>Broj telefona</td>
+    </tr>
+    <tr>
+      <td>Izvedeni atribut</td>
+      <td>Može se izračunati iz drugih podataka</td>
+      <td>Uzrast</td>
+    </tr>
+    <tr>
+      <td>Ključ</td>
+      <td>Jedinstveno identifikuje entitet</td>
+      <td>ID učenika</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Primer kako se entiteti i atributi prikazuju na ER dijagramu</h2>
+<img src="/images/er-dijagram-entitet.png" alt="" class="img-fluid velicina">
+
+<div class="napomena">Primeti da je na dijagramu entitet predstavljen pravougaonikom, a atributi elipsama i da je atribut koji je ključ podvučen linijom.</div>
+
+<h2>Podsticanje razmišljanja</h2>
+Razmisli o sledećem: da li je uvek potrebno čuvati sve informacije kao atribute? Ili neke od njih možemo izračunati kada su nam potrebne?
+
+Da li svaki podatak treba da bude prost atribut? Šta se dešava ako atribut zapravo sadrži više manjih delova?
+
+Kako bismo rešili situaciju u kojoj jedan učenik ima dva broja telefona?
+
+<div class="napomena">
+Učenici često prave grešku tako što ne razlikuju tipove atributa ili pokušavaju da sve podatke predstave na isti način. Na primer, mogu pokušati da smeste više telefonskih brojeva u jedan atribut bez razmišljanja o tome kako će se ti podaci kasnije koristiti. Zato je važno razumeti kakvu prirodu imaju podaci koje modelujemo.
+</div>
+
+<h2>Kako lakše prepoznati tip atributa</h2>
+Ako ti je teško da razlikuješ ove tipove atributa, pokušaj da postaviš sledeća pitanja: da li se atribut može podeliti na manje delove? Da li može imati više vrednosti? Da li može da se izračuna iz drugih podataka?
+
+Odgovori na ova pitanja pomoći će ti da pravilno klasifikuješ atribute.
+
+<h2>Šta sledi dalje</h2>
+Kada pravilno definišemo entitete i njihove atribute, dobijamo jasnu osnovu za dalji rad. Sledeći korak je da precizno definišemo kako su entiteti međusobno povezani, odnosno da detaljnije proučimo relacije.
+
+U narednoj lekciji ćemo se baviti relacijama između entiteta i naučiti koje vrste relacija postoje i kako se one prikazuju na ER dijagramu.
+
+<div class="zadatak">
+Za informacioni sistem za školu definiši jedan entitet po izboru, na primer Učenik ili Profesor, i napiši:
+
+najmanje četiri atributa tog entiteta
+označi koji atributi su prosti, a koji složeni, ako ih ima
+navedi jedan atribut koji može imati više vrednosti
+navedi jedan atribut koji bi mogao biti izveden
+
+Pokušaj da objasniš zašto si svaki atribut svrstao u određenu kategoriju.
+</div>

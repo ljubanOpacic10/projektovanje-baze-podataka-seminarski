@@ -1,0 +1,101 @@
+<h1>Funkcionalne zavisnosti</h1>
+
+U prethodnoj lekciji naučili smo kako se ER dijagram prevodi u tabele i kako se entiteti i relacije predstavljaju kroz kolone, primarne i strane ključeve. Sada već imamo konkretnu strukturu baze podataka.
+
+Međutim, postavlja se jedno važno pitanje: da li je ta struktura dobra i da li podaci u tabelama imaju smisla na način na koji su organizovani?
+
+Da bismo mogli da odgovorimo na to pitanje, uvodimo pojam funkcionalnih zavisnosti. Funkcionalna zavisnost opisuje odnos između atributa u jednoj tabeli. Ona nam govori da li vrednost jednog atributa određuje vrednost nekog drugog atributa.
+
+Jednostavno rečeno, kažemo da jedan atribut funkcionalno određuje drugi ako za svaku vrednost prvog atributa postoji tačno jedna odgovarajuća vrednost drugog atributa.
+
+Kako da prepoznamo koji atributi zaista određuju druge, a koji to ne mogu?
+
+<h2>Objašnjenje kroz primer školskog sistema</h2>
+Da bismo ovo bolje razumeli, vratimo se na informacioni sistem za školu i posmatrajmo tabelu Učenik. U toj tabeli imamo kolone kao što su id_ucenik, ime, prezime i razred. Ako znamo vrednost atributa id_ucenik, možemo tačno odrediti ime, prezime i razred tog učenika. To znači da id_ucenik funkcionalno određuje sve ostale atribute u toj tabeli.
+
+Sa druge strane, ako znamo samo ime učenika, ne možemo sa sigurnošću odrediti prezime ili razred, jer može postojati više učenika sa istim imenom. To znači da ime ne određuje ostale atribute.
+
+Razmisli o sledećem: koji atribut ili kombinacija atributa nam omogućava da jednoznačno identifikujemo podatke u tabeli? Upravo taj atribut ili skup atributa određuje ostale atribute i predstavlja ključni deo strukture tabele.
+
+Funkcionalne zavisnosti se često zapisuju u obliku: A -> B, što znači da atribut A određuje atribut B. Na primer, možemo zapisati: id_ucenik -> ime, prezime, razred.
+
+Važno je razumeti da funkcionalne zavisnosti ne zavise od toga kako su podaci trenutno upisani, već od pravila sistema. Ako pravilo sistema kaže da jedan identifikator jednoznačno određuje ostale podatke, onda ta zavisnost uvek važi.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Tabela</th>
+			<th>Primer funkcionalne zavisnosti</th>
+			<th>Objašnjenje</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Učenik</td>
+			<td>id_ucenik -> ime, prezime, razred</td>
+			<td>Jedan identifikator učenika određuje tačno jednog učenika i njegove podatke</td>
+		</tr>
+		<tr>
+			<td>Predmet</td>
+			<td>id_predmet -> naziv</td>
+			<td>Jedinstveni identifikator predmeta određuje njegov naziv</td>
+		</tr>
+	</tbody>
+</table>
+
+Pogledajmo sada drugi primer. U tabeli Predmet možemo imati kolone id_predmet i naziv. Ako svaki predmet ima jedinstveni identifikator, tada id_predmet određuje naziv. Međutim, ako bismo pretpostavili da dva predmeta mogu imati isti naziv, tada naziv ne bi mogao da određuje id_predmet.
+
+Funkcionalne zavisnosti su važne jer nam pomažu da uočimo potencijalne probleme u tabelama. Na primer, ako u jednoj tabeli imamo atribute koji ne zavise direktno od primarnog ključa, to može biti znak da tabela nije dobro organizovana.
+
+Razmisli o situaciji u kojoj u tabeli Ocena čuvamo i ime učenika i naziv predmeta, pored njihovih identifikatora. U tom slučaju, ime učenika zavisi od id_ucenik, a ne direktno od primarnog ključa tabele Ocena. Ovo može dovesti do ponavljanja podataka i problema pri ažuriranju.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Tabela</th>
+			<th>Problematičan atribut</th>
+			<th>Zašto je problem</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Ocena</td>
+			<td>ime_ucenika</td>
+			<td>Zavisi od id_ucenik, a ne direktno od ključa tabele Ocena</td>
+		</tr>
+		<tr>
+			<td>Ocena</td>
+			<td>naziv_predmeta</td>
+			<td>Zavisi od id_predmet, pa nepotrebno duplira podatke iz tabele Predmet</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Podsticanje razmišljanja</h2>
+Šta bi se desilo ako bismo u svakoj tabeli čuvali i identifikatore i tekstualne podatke koji već postoje u drugim tabelama?
+
+Kako bismo prepoznali da neki atribut ne zavisi direktno od primarnog ključa?
+
+Kako funkcionalne zavisnosti mogu da nam pomognu da odlučimo koje podatke treba razdvojiti u posebne tabele?
+
+<div class="napomena">
+Učenici često prave grešku tako što posmatraju funkcionalne zavisnosti samo kao apstraktan pojam. Međutim, one imaju veoma praktičnu primenu. One nam pomažu da razumemo kako su podaci povezani i da li je struktura tabele logična.
+
+Ako ti je teško da prepoznaš funkcionalne zavisnosti, uzmi jedan red iz tabele i zapitaj se koje informacije možeš da zaključiš na osnovu određenog atributa. Ako iz jedne vrednosti možeš uvek da dobiješ drugu, onda postoji funkcionalna zavisnost.
+</div>
+
+<h2>Zaključak</h2>
+Razumevanje funkcionalnih zavisnosti je ključni korak ka normalizaciji baze podataka, o kojoj ćemo govoriti u narednim lekcijama. One nam omogućavaju da prepoznamo koje podatke treba razdvojiti u različite tabele kako bismo izbegli probleme.
+
+U narednoj lekciji ćemo se baviti anomalijama koje nastaju u loše organizovanim tabelama i videti kako funkcionalne zavisnosti pomažu da se ti problemi izbegnu.
+
+<div class="zadatak">
+Posmatraj tabelu Učenik koja sadrži sledeće atribute:
+id_ucenik, ime, prezime, razred
+
+* napiši koje funkcionalne zavisnosti postoje u ovoj tabeli
+* objasni zašto id_ucenik određuje ostale atribute
+* razmisli da li neki drugi atribut može određivati ostale i objasni zašto ili zašto ne
+
+Pokušaj da obrazložiš svoje odgovore na osnovu pravila sistema, a ne samo na osnovu primera podataka.
+</div>

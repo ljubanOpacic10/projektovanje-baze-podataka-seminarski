@@ -1,0 +1,75 @@
+<h1>Primer iz realnog sveta - školski sistem</h1>
+
+U prethodnoj lekciji upoznali smo se sa relacijskim bazama podataka i videli kako se podaci organizuju u tabele, redove i kolone. Sada pravimo korak dalje i primenjujemo to znanje na konkretan primer iz realnog sveta.
+
+Kroz ostatak kursa koristimo informacioni sistem škole kao glavni primer, jer je dovoljno jednostavan da ga razumemo, a dovoljno složen da pokaže važne koncepte.
+
+<h2>Uvod kroz pitanje i problem</h2>
+Zamisli da dobiješ zadatak da napraviš bazu podataka za školu. Pre crtanja tabela, postavlja se ključno pitanje: koje informacije su nam uopšte potrebne i šta sve želimo da pratimo u tom sistemu?
+
+Ako odmah krenemo na tehničke detalje bez analize, lako možemo napraviti loš dizajn koji se kasnije teško ispravlja.
+
+<h2>Analiza sistema kroz primer škole</h2>
+Kada razmišljamo kako funkcioniše škola, lako uočavamo nekoliko osnovnih celina: učenici, profesori, predmeti i ocene. Svaka od ovih celina predstavlja jednu vrstu podataka koju treba čuvati.
+
+Učenici su centralni deo sistema. Za svakog učenika želimo da čuvamo ime, prezime i razred. Često su važni i dodatni podaci, kao što su datum rođenja i odeljenje.
+
+Profesori su druga važna celina. Za svakog profesora možemo čuvati ime i prezime. Tu se javlja i važno pitanje: da li jedan profesor može predavati više predmeta? Ovakva pitanja su bitna za kasnije modelovanje.
+
+Predmeti predstavljaju ono što se uči u školi. Svaki predmet ima naziv, a može biti povezan sa jednim ili više profesora.
+
+Ocene su posebna celina jer povezuju učenike i predmete. Jedna ocena uvek pripada određenom učeniku i određenom predmetu.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Celina sistema</th>
+			<th>Primer informacija</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Učenik</td>
+			<td>Ime, Prezime, Razred, DatumRođenja</td>
+		</tr>
+		<tr>
+			<td>Profesor</td>
+			<td>Ime, Prezime</td>
+		</tr>
+		<tr>
+			<td>Predmet</td>
+			<td>NazivPredmeta</td>
+		</tr>
+		<tr>
+			<td>Ocena</td>
+			<td>Učenik, Predmet, VrednostOcene</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Zašto ne jedna velika tabela</h2>
+Razmisli o ideji da sve informacije čuvamo u jednoj tabeli sa kolonama za učenika, predmet, profesora i ocenu. Na prvi pogled deluje jednostavno, ali bi brzo postalo neuredno.
+
+Podaci bi se mnogo ponavljali, promene bi bile komplikovane, a greške česte. Ako profesor promeni predmet, morali bismo da menjamo podatke na mnogo mesta.
+
+Zato sistem razlažemo na manje i smisleno organizovane celine. Svaka celina treba da predstavlja jednu vrstu objekata iz realnog sveta.
+
+<h2>Podsticanje razmišljanja</h2>
+Šta bi se desilo ako bismo sve podatke škole čuvali u jednoj tabeli?
+
+Kako bismo lako pronašli sve ocene jednog učenika bez ponavljanja istih informacija o predmetu i profesoru?
+
+Kako bismo objasnili nekome ko prvi put vidi sistem koje su najvažnije celine i kako su povezane?
+
+<div class="napomena">
+Najčešća greška je da se odmah prelazi na pravljenje tabela bez razumevanja sistema. To često vodi lošem dizajnu baze. Prvi korak treba da bude analiza: koje stvari postoje u sistemu, koje podatke imaju i kako su međusobno povezane.
+</div>
+
+<h2>Zaključak</h2>
+U ovoj lekciji naučili smo da je pre tehničkog modelovanja najvažnije razumeti realan sistem i prepoznati njegove osnovne celine.
+
+U narednoj lekciji ćemo uvesti osnovne pojmove kao što su entiteti, atributi i relacije i naučiti kako da precizno opišemo elemente jednog sistema.
+
+<div class="zadatak">
+Zamisli da treba da napraviš bazu podataka za školu. Napiši koje osnovne celine vidiš u tom sistemu. Pokušaj da navedeš najmanje četiri različite celine i za svaku napiši koje informacije bi želeo da čuvaš. Nemoj još uvek razmišljati o tabelama, već samo o tome šta sve postoji u sistemu i koje podatke treba zabeležiti.
+</div>

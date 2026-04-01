@@ -1,0 +1,121 @@
+<h1>Prevođenje ER dijagrama u tabele</h1>
+
+U prethodnoj lekciji napravili smo kompletan ER dijagram za informacioni sistem za školu. Definisali smo tipove entiteta, njihove atribute i poveznike između njih, kao i kardinalnost i opcionalnost veza.
+
+Sada dolazimo do veoma važnog koraka: kako taj dijagram pretvaramo u konkretne tabele koje će postojati u bazi podataka?
+
+<h2>Uvod</h2>
+ER dijagram je konceptualni model. On nam pomaže da razumemo sistem i njegove delove, ali baza podataka na kraju mora biti predstavljena kroz tabele.
+
+Zbog toga je potrebno da naučimo pravila pomoću kojih se ER dijagram prevodi u relacijski model, odnosno u skup tabela.
+
+Kako da iz jednog dijagrama dođemo do tačnih tabela, primarnih ključeva i stranih ključeva bez greške?
+
+<h2>Objašnjenje</h2>
+Prvi korak je prevođenje tipova entiteta u tabele. Svaki tip entiteta iz ER dijagrama postaje jedna tabela u bazi podataka. Na primer, tip entiteta Učenik postaje tabela Učenik, tip entiteta Profesor postaje tabela Profesor, a tip entiteta Predmet postaje tabela Predmet.
+
+Atributi tipa entiteta postaju kolone u odgovarajućoj tabeli. Na primer, atributi ime, prezime i razred tipa entiteta Učenik postaju kolone u tabeli Učenik. Isto važi i za ostale tipove entiteta.
+
+Međutim, svaka tabela mora imati primarni ključ. Kao što smo ranije naučili, primarni ključ jednoznačno identifikuje svaku pojavu tipa entiteta. U praksi se često uvodi poseban atribut, kao što je ID, koji služi kao primarni ključ. Tako, tabela Učenik može imati kolonu id_ucenik, tabela Profesor kolonu id_profesor, a tabela Predmet kolonu id_predmet.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Tabela</th>
+			<th>Kolone</th>
+			<th>Primarni ključ</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Učenik</td>
+			<td>id_ucenik, ime, prezime, razred</td>
+			<td>id_ucenik</td>
+		</tr>
+		<tr>
+			<td>Profesor</td>
+			<td>id_profesor, ime, prezime</td>
+			<td>id_profesor</td>
+		</tr>
+		<tr>
+			<td>Predmet</td>
+			<td>id_predmet, naziv, id_profesor</td>
+			<td>id_predmet</td>
+		</tr>
+	</tbody>
+</table>
+
+Sledeći korak je prevođenje relacija. Način na koji se relacije prevode zavisi od njihovog tipa.
+
+Kod relacije jedan prema više (1:N), strani ključ se dodaje u tabelu koja odgovara više strani relacije. Na primer, u informacionom sistemu za školu, jedna pojava tipa entiteta Profesor može biti povezana sa više pojava tipa entiteta Predmet. To znači da u tabelu Predmet dodajemo strani ključ koji se odnosi na tabelu Profesor. Ova kolona, na primer id_profesor, pokazuje koji profesor predaje dati predmet.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Relacija</th>
+			<th>Gde ide strani ključ</th>
+			<th>Strani ključ</th>
+			<th>Referenca</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Profesor 1:N Predmet</td>
+			<td>Predmet</td>
+			<td>id_profesor</td>
+			<td>Profesor(id_profesor)</td>
+		</tr>
+	</tbody>
+</table>
+
+Kod relacije jedan prema jedan (1:1), strani ključ se može dodati u jednu od tabela. Izbor zavisi od pravila sistema i opcionalnosti veze. U praksi se često bira ona tabela kod koje je veza obavezna ili ona koja ima manje podataka.
+
+Kod relacije više prema više (N:M), situacija je drugačija. Ova relacija se ne može direktno predstaviti pomoću stranog ključa u jednoj tabeli. Umesto toga, uvodi se nova tabela koja predstavlja tu relaciju. Ova tabela sadrži strane ključeve koji se odnose na obe povezane tabele.
+
+U našem primeru, relacija između tipa entiteta Učenik i tipa entiteta Predmet rešena je uvođenjem tipa entiteta Ocena. Tabela Ocena sadrži strane ključeve koji se odnose na tabelu Učenik i tabelu Predmet. Pored toga, ova tabela ima i svoje atribute, kao što su vrednost i datum.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Tabela</th>
+			<th>Kolone</th>
+			<th>Primarni ključ</th>
+			<th>Strani ključevi</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Ocena</td>
+			<td>id_ocena, id_ucenik, id_predmet, vrednost, datum</td>
+			<td>id_ocena</td>
+			<td>id_ucenik -> Učenik(id_ucenik), id_predmet -> Predmet(id_predmet)</td>
+		</tr>
+	</tbody>
+</table>
+
+Na ovaj način tabela Ocena povezuje učenike i predmete i istovremeno čuva dodatne informacije o toj vezi. Ovo je tipičan primer upotrebe gerunda u praksi.
+
+Važno je razumeti da svaka relacija iz ER dijagrama mora biti pravilno prevedena u strukturu tabela. Ako pogrešno prevedemo relaciju, dobićemo bazu koja ne odražava pravila sistema i koja može dovesti do grešaka.
+
+<h2>Podsticanje razmišljanja</h2>
+Šta bi se desilo ako bismo relaciju više prema više pokušali da predstavimo samo jednim stranim ključem?
+
+Kako bismo znali u kojoj tabeli treba da stoji strani ključ kod relacije jedan prema više?
+
+Kako bismo proverili da li sve veze iz ER dijagrama zaista postoje u tabelama koje smo napravili?
+
+<h2>Zaključak</h2>
+Prevođenje ER dijagrama u tabele predstavlja prelaz iz konceptualnog u konkretan model baze podataka. Ovo je ključni korak koji povezuje teoriju i praksu.
+
+U narednoj lekciji ćemo se detaljnije baviti funkcionalnim zavisnostima i videti kako one utiču na strukturu tabela i kvalitet baze podataka.
+
+<div class="zadatak">
+Na osnovu ER dijagrama informacionog sistema za školu koji si napravio u prethodnoj lekciji:
+
+* napiši koje tabele postoje u bazi
+* za svaku tabelu navedi kolone koje sadrži
+* označi primarni ključ svake tabele
+* navedi strane ključeve i objasni na koje tabele se odnose
+
+Pokušaj da proveriš da li sve relacije iz dijagrama pravilno postoje u obliku stranih ključeva ili posebnih tabela.
+</div>
