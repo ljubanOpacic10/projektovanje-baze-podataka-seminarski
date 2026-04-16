@@ -12,7 +12,7 @@ Cilj kursa:
 - da povežu teoriju sa realnim primerima
 - da na kraju mogu samostalno da naprave jednostavan model baze
 
-Kurs ima 20 lekcija i podeljen je u 4 celine:
+Kurs ima 27 lekcija i podeljen je u 5 celina:
 
 ### Modul 1: Uvod i osnovni pojmovi
 - šta je baza podataka
@@ -40,6 +40,15 @@ Kurs ima 20 lekcija i podeljen je u 4 celine:
 - CREATE TABLE
 - mini projekat
 - završni projekat
+
+### Modul 5: Rad sa bazom kroz aplikaciju (ORM i Code-First pristup)
+- šta je ORM i zašto se koristi
+- Code-First vs Database-First pristup
+- Entity Framework Core (DbContext, DbSet)
+- definisanje modela (klasa → tabela)
+- migracije i kreiranje baze iz koda
+- rad sa podacima kroz ORM (CRUD, LINQ)
+- poređenje SQL vs ORM pristupa
 
 Tokom kursa koristi se jedan realan primer:
 - škola ili online prodavnica

@@ -11,6 +11,15 @@ U ER dijagramu, entiteti se prikazuju kao pravougaonici i obično se označavaju
 
 Zamisli da crtaš dijagram za školu. Ako napišeš Učenik u pravougaoniku, odmah je jasno da taj deo dijagrama predstavlja sve podatke koje želimo da čuvamo o učenicima.
 
+<h2>Kako prepoznati entitete</h2>
+Jedno od prvih pitanja koje se javlja jeste: kako znamo šta je entitet, a šta nije? Evo jednostavnog pravila koje može da pomogne. Entitet je nešto o čemu želimo da čuvamo više različitih informacija i što ima više pojava u sistemu.
+
+Na primer, u školi postoji više učenika. Svaki od njih ima ime, prezime, razred, datum rođenja. Zato je Učenik entitet. Sa druge strane, razred učenika je samo jedan podatak o učeniku, pa nije entitet već atribut.
+
+Međutim, pamet je u nijansi. Ako bismo hteli da za svaki razred čuvamo dodatne informacije, na primer naziv, razrednog starešinu ili učionicu u kojoj se nalazi, onda bi Razred mogao postati zaseban entitet. Odluka zavisi od toga koliko detaljno želimo da modelujemo sistem.
+
+Evo korisnog pravila: ako neko zamisliš u sistemu kao imenicu koja ima sopstvene podatke i više pojava, verovatno je u pitanju entitet.
+
 <h2>Atributi na ER dijagramu</h2>
 Međutim, sam entitet nije dovoljan. Potrebno je da znamo i koje informacije čuvamo o njemu. Te informacije nazivamo atributi. Atributi opisuju entitet i predstavljaju njegove osobine.
 
@@ -26,25 +35,55 @@ Jedan od najosnovnijih tipova je prost atribut. To je atribut koji se ne može d
 
 Na primer, razred ili datum rođenja možemo posmatrati kao proste atribute.
 
+Zašto je ovo važno? Zato što prosti atributi predstavljaju podatke koji su "konačni", odnosno ne možemo ih smisleno podeliti na manje, korisne delove. Razred je jedan podatak. Možemo ga zapisati kao "3" ili "3a", ali ga ne delimo na manje celine. Isto važi za ocenu, jer je ocena jedan broj (na primer, 5).
+
+Većina atributa u jednom sistemu su prosti, i to je sasvim u redu. Nisu svi podaci složeni.
+
 <h2>Složeni atributi</h2>
 Sa druge strane, postoje složeni atributi. To su atributi koji se mogu podeliti na više manjih delova.
 
 Na primer, adresa je podatak koji dalje možemo podeliti na Ulicu, Grad i Poštanski broj. U tom slučaju govorimo o složenom atributu.
+
+Zašto bismo uopšte delili atribut na manje delove? Razlog je praktičan. Ako adresu čuvamo kao jedan tekst, na primer "Kralja Petra 15, Beograd, 11000", teško ćemo moći da pronađemo sve učenike iz Beograda. Morali bismo da pretražujemo tekst, što je nepouzdano i sporo. Ali ako adresu podelimo na Ulicu, Grad i Poštanski broj, možemo jednostavno da potražimo sve zapise gde je Grad = "Beograd".
+
+Dakle, odluka o tome da li ćemo atribut posmatrati kao prost ili složen zavisi od toga kako ćemo te podatke koristiti. Ako nam nikada neće trebati da pretražujemo po delovima adrese, možemo je čuvati kao jedan podatak. Ali ako nam je važno da filtriramo po gradu ili ulici, onda je bolje da je podelimo.
+
+Na ER dijagramu složeni atribut se prikazuje tako što glavna elipsa (na primer, Adresa) ima pod-elipse koje predstavljaju njene delove (Ulica, Grad, Poštanski broj).
 
 <h2>Više-vrednosni atributi</h2>
 Postoje i atributi koji mogu imati više vrednosti za jedan entitet. Takve atribute nazivamo više-vrednosni atributi.
 
 Na primer, učenik može imati više brojeva telefona. U tom slučaju, jedan atribut može imati više vrednosti, što zahteva posebnu pažnju prilikom modelovanja.
 
+Obrati pažnju na razliku između složenog i više-vrednosnog atributa, jer je ovo mesto gde se često pravi zabuna. Složeni atribut se deli na manje delove koji su različite prirode (ulica, grad, poštanski broj su sve različiti podaci). Više-vrednosni atribut ima više vrednosti iste prirode (dva ili tri broja telefona su svi isti tip podatka).
+
+Zašto je ovo problem? Ako pokušamo da smestimo više brojeva telefona u jednu ćeliju tabele, na primer "0641234567, 0119876543", nastaju isti problemi kao kod složenih atributa, ne možemo lako pretraživati, filtrirati ili ažurirati pojedinačne vrednosti. Zato se više-vrednosni atributi u praksi često prevode u zasebnu tabelu, ali o tome ćemo više govoriti kada budemo učili o prevođenju ER dijagrama u tabele.
+
+Na ER dijagramu, više-vrednosni atribut se prikazuje kao elipsa sa dvostrukom linijom, što ga vizuelno razlikuje od običnog atributa.
+
+Drugi primeri više-vrednosnih atributa iz školskog sistema mogu biti: učenik može imati više email adresa ili profesor može imati više stručnih kvalifikacija.
+
 <h2>Izvedeni atributi</h2>
 Još jedan važan tip atributa je izvedeni atribut. To je atribut čija se vrednost može izračunati na osnovu drugih podataka.
 
 Na primer, ako imamo datum rođenja učenika, možemo izračunati njegov uzrast. U tom slučaju uzrast ne moramo direktno čuvati, već ga možemo dobiti iz postojećih podataka.
 
+Ovo otvara praktično pitanje: zašto bismo uopšte označavali izvedene atribute na dijagramu ako ih ne moramo čuvati? Razlog je što nam izvedeni atribut govori da ta informacija postoji u sistemu i da je važna, ali da je ne treba direktno skladištiti. To je korisna informacija za svakoga ko čita dijagram.
+
+U praksi, čuvanje izvedenih podataka može da stvori probleme. Na primer, ako bismo čuvali uzrast učenika kao broj, ta vrednost bi postala netačna već sledećeg dana nakon rođendana. Morali bismo stalno da ažuriramo tu vrednost. Ali ako čuvamo samo datum rođenja, uzrast možemo uvek tačno izračunati kada nam zatreba.
+
+Još jedan primer: ukupan broj učenika koji pohađaju neki predmet je izvedeni atribut jer možemo da ga izračunamo prebrojavši sve učenike povezane sa tim predmetom.
+
+Na ER dijagramu izvedeni atribut se prikazuje kao elipsa sa isprekidanom linijom.
+
 <h2>Ključ kao poseban atribut</h2>
 Poseban tip atributa koji smo već spominjali su ključevi, odnosno identifikatori koji se koriste kako bi jedinstveno identifikovali svaki red u nekoj tabeli.
 
 Na primer, ID učenika može biti atribut koji služi da tačno razlikujemo jednog učenika od svih ostalih učenika u sistemu.
+
+Zašto je ovo toliko važno? Zamislimo situaciju u kojoj dva učenika imaju isto ime i prezime, na primer dva Marka Jovanovića. Bez ključa ne bismo mogli da ih razlikujemo. Ključ je jedini način da garantujemo da svaki entitet u sistemu bude jedinstven i prepoznatljiv.
+
+Na ER dijagramu, atribut koji predstavlja ključ označava se podvučenim tekstom unutar elipse. Kada vidiš podvučen naziv atributa na dijagramu, to ti govori da je u pitanju ključ.
 
 <table class="tabela">
   <thead>
@@ -52,6 +91,7 @@ Na primer, ID učenika može biti atribut koji služi da tačno razlikujemo jedn
       <th>Tip atributa</th>
       <th>Opis</th>
       <th>Primer iz školskog sistema</th>
+      <th>Prikaz na ER dijagramu</th>
     </tr>
   </thead>
   <tbody>
@@ -59,26 +99,31 @@ Na primer, ID učenika može biti atribut koji služi da tačno razlikujemo jedn
       <td>Prost atribut</td>
       <td>Ne može se dalje deliti</td>
       <td>Razred</td>
+      <td>Obična elipsa</td>
     </tr>
     <tr>
       <td>Složeni atribut</td>
       <td>Može se podeliti na manje delove</td>
       <td>Adresa</td>
+      <td>Elipsa sa pod-elipsama</td>
     </tr>
     <tr>
       <td>Više-vrednosni atribut</td>
       <td>Može imati više vrednosti</td>
       <td>Broj telefona</td>
+      <td>Elipsa sa dvostrukom linijom</td>
     </tr>
     <tr>
       <td>Izvedeni atribut</td>
       <td>Može se izračunati iz drugih podataka</td>
       <td>Uzrast</td>
+      <td>Elipsa sa isprekidanom linijom</td>
     </tr>
     <tr>
       <td>Ključ</td>
       <td>Jedinstveno identifikuje entitet</td>
       <td>ID učenika</td>
+      <td>Elipsa sa podvučenim tekstom</td>
     </tr>
   </tbody>
 </table>
@@ -95,6 +140,8 @@ Da li svaki podatak treba da bude prost atribut? Šta se dešava ako atribut zap
 
 Kako bismo rešili situaciju u kojoj jedan učenik ima dva broja telefona?
 
+Razmisli i o ovome: da li je ime i prezime profesora prost ili složen atribut? Na prvi pogled izgleda kao prost podatak, ali ako razmislimo o tome da se ime i prezime koristite odvojeno (na primer, sortiranje po prezimenu), onda bismo ih možda tretirali kao dva zasebna prosta atributa, a ne kao jedan složen. Ovakva razmišljanja su suština dobrog modelovanja.
+
 <div class="napomena">
 Učenici često prave grešku tako što ne razlikuju tipove atributa ili pokušavaju da sve podatke predstave na isti način. Na primer, mogu pokušati da smeste više telefonskih brojeva u jedan atribut bez razmišljanja o tome kako će se ti podaci kasnije koristiti. Zato je važno razumeti kakvu prirodu imaju podaci koje modelujemo.
 </div>
@@ -110,12 +157,13 @@ Kada pravilno definišemo entitete i njihove atribute, dobijamo jasnu osnovu za 
 U narednoj lekciji ćemo se baviti relacijama između entiteta i naučiti koje vrste relacija postoje i kako se one prikazuju na ER dijagramu.
 
 <div class="zadatak">
-Za informacioni sistem za školu definiši jedan entitet po izboru, na primer Učenik ili Profesor, i napiši:
+Za informacioni sistem za školu definiši dva entiteta po izboru, na primer Učenik i Profesor, i za svaki napiši:
 
 najmanje četiri atributa tog entiteta
-označi koji atributi su prosti, a koji složeni, ako ih ima
+oznaci koji atributi su prosti, a koji složeni, ako ih ima
 navedi jedan atribut koji može imati više vrednosti
 navedi jedan atribut koji bi mogao biti izveden
+za svaki atribut objasni kako bi se prikazao na ER dijagramu (obična elipsa, dvostruka linija, isprekidana linija ili podvučen tekst)
 
-Pokušaj da objasniš zašto si svaki atribut svrstao u određenu kategoriju.
+Pokušaj da objasniš zašto si svaki atribut svrstao u određenu kategoriju i šta bi se desilo kada bi pogrešno odredio tip atributa.
 </div>

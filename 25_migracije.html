@@ -1,0 +1,228 @@
+<h1>Migracije – kreiranje baze iz koda</h1>
+
+U prethodnoj lekciji naučili smo kako da definišemo model klase u C# koje predstavljaju tabele u bazi. Napisali smo klase Ucenik, Profesor, Predmet i Ocena sa svim svojstvima i vezama. Ali te klase za sada postoje samo u kodu. Kako od tog koda zaista nastaje baza podataka sa tabelama? Odgovor su migracije.
+
+<h2>Šta su migracije</h2>
+
+Migracija je način da kažemo EF Core-u: „Pogledaj moje klase i na osnovu njih napravi ili ažuriraj bazu podataka."
+
+Migracija je u suštini skup instrukcija koje opisuju koje promene treba primeniti na bazu. Te instrukcije generiše sam EF Core na osnovu naših klasa. Mi ne moramo da pišemo SQL komande za kreiranje tabela, ali možemo da vidimo šta EF Core generiše u pozadini.
+
+Možemo da zamislimo migracije kao „istoriju promena" naše baze. Svaka migracija beleži šta je promenjeno: da li je dodata nova tabela, novo svojstvo ili nova veza.
+
+<h2>Tok rada sa migracijama</h2>
+
+Pogledajmo kako izgleda ceo proces od pisanja klase do kreiranja baze:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Korak</th>
+			<th>Šta radiš</th>
+			<th>Rezultat</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1</td>
+			<td>Napišeš klase (modele)</td>
+			<td>Ucenik, Profesor, Predmet, Ocena</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>Napišeš DbContext</td>
+			<td>SkolaContext sa DbSet svojstvima</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>Pokreneš komandu za kreiranje migracije</td>
+			<td>EF Core generiše fajl sa instrukcijama</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>Pokreneš komandu za primenu migracije</td>
+			<td>Baza se kreira ili ažurira</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Komande za migracije</h2>
+
+Za rad sa migracijama koriste se dve osnovne komande u konzoli:
+
+<xmp class="primer_ta">
+dotnet ef migrations add KreiranjeBaze
+</xmp>
+
+Ova komanda govori EF Core-u da pogleda naše klase i generiše migraciju. Ime migracije „KreiranjeBaze" opisuje šta ta migracija radi. Možeš da izabereš bilo koje ime koje jasno opisuje promenu.
+
+<xmp class="primer_ta">
+dotnet ef database update
+</xmp>
+
+Ova komanda primenjuje migraciju, odnosno izvršava generisane SQL komande nad bazom. Ako baza ne postoji, kreiraće je. Ako postoji, primeniti samo nove promene.
+
+<h2>Šta migracija generiše u pozadini</h2>
+
+Kada pokrenemo prvu migraciju za naš školski sistem, EF Core generiše kod koji opisuje kreiranje tabela. Fajl migracije izgleda otprilike ovako:
+
+<xmp class="primer_ta">
+public partial class KreiranjeBaze : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.CreateTable(
+            name: "Ucenici",
+            columns: table => new
+            {
+                Id = table.Column<int>(nullable: false)
+                    .Annotation("SqlServer:Identity", "1, 1"),
+                Ime = table.Column<string>(nullable: true),
+                Prezime = table.Column<string>(nullable: true),
+                Razred = table.Column<string>(nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Ucenici", x => x.Id);
+            });
+    }
+}
+</xmp>
+
+Ne moraš da razumeš svaki detalj ovog koda. Ono što je bitno je da vidiš da EF Core sam opisuje kreiranje tabele sa kolonama, tipovima podataka i primarnim ključem. U pozadini, ovo se prevodi u SQL:
+
+<xmp class="primer_ta">
+CREATE TABLE Ucenici (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Ime NVARCHAR(MAX),
+    Prezime NVARCHAR(MAX),
+    Razred NVARCHAR(MAX)
+);
+</xmp>
+
+Prepoznaješ li ovo? To je gotovo ista komanda koju smo ručno pisali u ranijim lekcijama. Razlika je samo u tome što sada EF Core to radi umesto nas.
+
+<h2>Poređenje sa ručnim CREATE TABLE</h2>
+
+Hajde da direktno uporedimo dva pristupa:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Database-First (SQL)</th>
+			<th>Code-First (migracija)</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Pišeš CREATE TABLE ručno</td>
+			<td>EF Core generiše SQL iz klase</td>
+		</tr>
+		<tr>
+			<td>Moraš da znaš tačnu SQL sintaksu</td>
+			<td>Definišeš svojstva u C# klasi</td>
+		</tr>
+		<tr>
+			<td>Promene radiš sa ALTER TABLE</td>
+			<td>Dodaš novo svojstvo i napraviš novu migraciju</td>
+		</tr>
+		<tr>
+			<td>Izvršavaš u SSMS-u</td>
+			<td>Izvršavaš komandom u konzoli</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Dodavanje promena – nova migracija</h2>
+
+Zamisli da nakon kreiranja baze shvatiš da u klasi Ucenik treba dodati i email adresu. U Database-First pristupu bi morao da napišeš:
+
+<xmp class="primer_ta">
+ALTER TABLE Ucenik ADD email NVARCHAR(100);
+</xmp>
+
+U Code-First pristupu, samo dodaš novo svojstvo u klasu:
+
+<xmp class="primer_ta">
+public class Ucenik
+{
+    public int Id { get; set; }
+    public string Ime { get; set; }
+    public string Prezime { get; set; }
+    public string Razred { get; set; }
+    public string Email { get; set; }  // novo svojstvo
+}
+</xmp>
+
+I zatim pokreneš novu migraciju:
+
+<xmp class="primer_ta">
+dotnet ef migrations add DodavanjeEmaila
+</xmp>
+
+EF Core sam prepozna da je dodato novo svojstvo i generiše migraciju koja dodaje kolonu u postojeću tabelu. Kada primenimo migraciju, baza se automatski ažurira.
+
+<h2>Zaključak</h2>
+
+Ovo je možda najvažnija stvar u celoj lekciji. Ceo proces izgleda ovako:
+
+Napišeš klase u C#.
+
+Pokreneš jednu komandu za generisanje migracije.
+
+Pokreneš drugu komandu za primenu migracije.
+
+Baza sa svim tabelama, kolonama, ključevima i relacijama sada postoji.
+
+Nisi napisao nijednu liniju SQL-a. Nisi otvarao SSMS. Sve se desilo iz koda.
+
+Naravno, u pozadini SQL i dalje postoji. EF Core ga generiše i izvršava umesto tebe. Ali moć ovog pristupa je u tome što sve promene pratiš na jednom mestu, u kodu, a baza se automatski usklađuje.
+
+<div class="napomena">
+Česta zabuna je da učenici misle da migracije brišu postojeće podatke. To uglavnom nije slučaj. Migracije samo dodaju ili menjaju strukturu baze. Postojeći podaci ostaju. Međutim, ako obrišeš kolonu koja sadrži podatke, ti podaci će biti izgubljeni. Zato je važno pažljivo razmisliti pre nego što napraviš migraciju koja uklanja nešto iz modela.
+</div>
+
+<h2>Pregled komandi</h2>
+
+Za kraj, evo pregled najvažnijih komandi za rad sa migracijama:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Komanda</th>
+			<th>Šta radi</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>dotnet ef migrations add [Ime]</td>
+			<td>Kreira novu migraciju</td>
+		</tr>
+		<tr>
+			<td>dotnet ef database update</td>
+			<td>Primenjuje migracije na bazu</td>
+		</tr>
+		<tr>
+			<td>dotnet ef migrations list</td>
+			<td>Prikazuje listu svih migracija</td>
+		</tr>
+		<tr>
+			<td>dotnet ef migrations remove</td>
+			<td>Uklanja poslednju migraciju</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Šta sledi dalje</h2>
+
+U narednoj lekciji ćemo videti kako da radimo sa podacima kroz EF Core. Naučićemo kako da dodajemo, čitamo, menjamo i brišemo podatke koristeći C# kod umesto SQL komandi.
+
+<div class="zadatak">
+Objasni svojim rečima šta je migracija i čemu služi.
+
+Napiši redosled komandi koje bi koristio da od klasa Ucenik i Profesor kreiraš bazu podataka koristeći EF Core.
+
+Zamisli da trebaš da dodaš kolonu BrojTelefona u tabelu Profesor. Opiši korake koje bi pratio u Code-First pristupu.
+
+Uporedi proces kreiranja tabele ručno (SQL) i automatski (migracija). Koje su prednosti migracija?
+</div>

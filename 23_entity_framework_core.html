@@ -1,0 +1,169 @@
+<h1>Uvod u Entity Framework Core</h1>
+
+U prethodnoj lekciji uporedili smo Database-First i Code-First pristup i videli da Code-First omogućava da strukturu baze definišemo kroz klase u programskom jeziku. Ali da bi to funkcionisalo, potreban nam je konkretan alat koji će naše klase pretvoriti u tabele i omogućiti rad sa podacima. Taj alat je Entity Framework Core.
+
+<h2>Šta je Entity Framework Core</h2>
+
+Entity Framework Core, skraćeno EF Core, je ORM alat koji je razvio Microsoft za rad sa bazama podataka u C# projektima. To je najkorišćeniji ORM u .NET svetu i dostupan je besplatno.
+
+Kada kažemo da je EF Core ORM, to znači da radi tačno ono o čemu smo pričali u prethodnim lekcijama: povezuje klase iz koda sa tabelama u bazi i automatski generiše SQL komande umesto nas.
+
+EF Core podržava više sistema za upravljanje bazama podataka, uključujući Microsoft SQL Server koji smo koristili tokom kursa. To znači da možemo da nastavimo sa istim serverom, ali sada ćemo mu pristupati kroz kod umesto kroz SSMS.
+
+<h2>Kako EF Core funkcioniše</h2>
+
+Da bismo razumeli kako EF Core radi, treba da upoznamo dva ključna pojma: DbContext i DbSet.
+
+DbContext je klasa koja predstavlja vezu između naše aplikacije i baze podataka. Možemo da je zamislimo kao konekciju ka bazi. Kroz DbContext šaljemo sve zahteve: čitanje, dodavanje, izmenu i brisanje podataka.
+
+DbSet je svojstvo unutar DbContext-a koje predstavlja jednu tabelu u bazi. Svaki DbSet odgovara jednoj tabeli. Ako imamo tabelu Ucenik, imamo i DbSet za učenike.
+
+Pojednostavljeno:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>EF Core pojam</th>
+			<th>Odgovara u bazi</th>
+			<th>Analogija</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>DbContext</td>
+			<td>Cela baza podataka</td>
+			<td>Konekcija ka bazi</td>
+		</tr>
+		<tr>
+			<td>DbSet</td>
+			<td>Jedna tabela</td>
+			<td>Kolekcija objekata jednog tipa</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Primer: DbContext za školski sistem</h2>
+
+Pogledajmo kako izgleda DbContext za naš školski sistem. Pretpostavimo da za sada imamo samo dve tabele: Ucenik i Profesor.
+
+Prvo definišemo klase koje predstavljaju tabele:
+
+<xmp class="primer_ta">
+public class Ucenik
+{
+    public int Id { get; set; }
+    public string Ime { get; set; }
+    public string Prezime { get; set; }
+    public string Razred { get; set; }
+}
+
+public class Profesor
+{
+    public int Id { get; set; }
+    public string Ime { get; set; }
+    public string Prezime { get; set; }
+}
+</xmp>
+
+Zatim pravimo DbContext klasu koja objedinjuje sve tabele:
+
+<xmp class="primer_ta">
+public class SkolaContext : DbContext
+{
+    public DbSet<Ucenik> Ucenici { get; set; }
+    public DbSet<Profesor> Profesori { get; set; }
+}
+</xmp>
+
+SkolaContext nasleđuje klasu DbContext, čime dobija sve mogućnosti za rad sa bazom. Dva DbSet svojstva govore EF Core-u da u bazi treba da postoje tabele Ucenici i Profesori.
+
+<h2>Šta DbContext radi u pozadini</h2>
+
+Kada u kodu napišeš nešto poput:
+
+<xmp class="primer_ta">
+var ucenici = context.Ucenici.ToList();
+</xmp>
+
+EF Core u pozadini generiše SQL upit:
+
+<xmp class="primer_ta">
+SELECT * FROM Ucenici;
+</xmp>
+
+I šalje ga bazi podataka. Rezultat koji se vrati iz baze EF Core automatski pretvara u listu objekata klase Ucenik. Ti nikada ne vidiš taj SQL upit, ali on postoji.
+
+Na isti način, kada dodaš novi objekat:
+
+<xmp class="primer_ta">
+context.Ucenici.Add(new Ucenik 
+{ 
+    Ime = "Ana", 
+    Prezime = "Petrovic", 
+    Razred = "II2" 
+});
+context.SaveChanges();
+</xmp>
+
+EF Core generiše INSERT komandu i šalje je bazi:
+
+<xmp class="primer_ta">
+INSERT INTO Ucenici (Ime, Prezime, Razred) VALUES ('Ana', 'Petrovic', 'II2');
+</xmp>
+
+<h2>Struktura jednog EF Core projekta</h2>
+
+U pravom projektu, EF Core se koristi unutar C# aplikacije. Osnovni delovi tog projekta su:
+
+Model klase. To su klase poput Ucenik i Profesor koje predstavljaju tabele.
+
+DbContext klasa. To je klasa poput SkolaContext koja objedinjuje sve modele i omogućava komunikaciju sa bazom.
+
+Konfiguracija veze. To su podešavanja koja govore EF Core-u gde se nalazi baza podataka, na primer na kom serveru i pod kojim imenom.
+
+Konfigurisanje veze ka SQL Server-u izgleda ovako:
+
+<xmp class="primer_ta">
+protected override void OnConfiguring(DbContextOptionsBuilder options)
+{
+    options.UseSqlServer("Server=localhost;Database=Skola;Trusted_Connection=True;");
+}
+</xmp>
+
+Ovaj tekst u zagradi naziva se connection string i sadrži informacije o serveru i bazi podataka. U ovom primeru, EF Core se povezuje na lokalni SQL Server i koristi bazu pod nazivom Skola.
+
+<div class="napomena">
+Učenici se ponekad zbune jer misle da moraju da nauče potpuno novi alat od nule. U stvari, EF Core koristi koncepte koje već znate: tabele, kolone, ključeve i relacije. Razlika je samo u tome što se sada te stvari izražavaju kroz C# kod umesto kroz SQL. Ako razumeš bazu podataka, EF Core će ti brzo postati jasan.
+</div>
+
+<h2>Vizuelni pregled: od klase do baze</h2>
+
+Hajde da rezimiramo ceo tok kojim EF Core radi sa našim školskim sistemom:
+
+Ti napišeš klasu Ucenik u C#.
+
+EF Core prepozna tu klasu kroz DbSet svojstvo u DbContext-u.
+
+Kada pokreneš migraciju, EF Core generiše SQL za kreiranje tabele.
+
+Baza se kreira ili ažurira automatski.
+
+Kada radiš sa podacima, EF Core prevodi tvoj kod u SQL komande.
+
+Ovaj ceo proces dešava se automatski, a ti ne moraš da napustiš okruženje svog programskog jezika.
+
+Šta misliš, koliko je lakše raditi kada imaš jednu klasu koja se menja na jednom mestu, umesto da ažuriraš SQL skripte, zatim menjač kod aplikacije, pa proveravaš da li je sve usklađeno?
+
+<h2>Šta sledi dalje</h2>
+
+U narednoj lekciji ćemo detaljnije pogledati kako se definišu model klase u EF Core-u. Videćemo kako se definišu svojstva, ključevi i veze između klasa, na primeru učenika i ocena iz našeg školskog sistema.
+
+<div class="zadatak">
+Objasni svojim rečima šta je DbContext i čemu služi.
+
+Objasni šta je DbSet i sa čim ga možemo uporediti u bazi podataka.
+
+Za školski sistem napiši DbContext klasu koja sadrži DbSet za Ucenik, Profesor i Predmet. Ne moraš da pišeš model klase, samo DbContext.
+
+Šta se dešava u pozadini kada napišemo context.Ucenici.ToList()? Koji SQL upit EF Core generiše?
+</div>

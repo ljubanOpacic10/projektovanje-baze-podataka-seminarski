@@ -1,0 +1,188 @@
+<h1>Code-First vs Database-First pristup</h1>
+
+U prethodnoj lekciji upoznali smo se sa pojmom ORM i videli kako je moguće raditi sa bazom podataka kroz objekte u programskom jeziku umesto da ručno pišemo SQL komande. Sada ćemo pogledati dva različita pristupa razvoju baze podataka i razumeti kako se oni razlikuju.
+
+<h2>Dva načina razvoja baze</h2>
+
+Kada pravimo aplikaciju koja koristi bazu podataka, postoje dva osnovna pristupa:
+
+Database-First pristup, gde prvo kreiramo bazu podataka, a zatim pišemo kod koji koristi tu bazu.
+
+Code-First pristup, gde prvo pišemo klase u programskom jeziku, a zatim na osnovu njih automatski kreiramo bazu.
+
+Oba pristupa vode do istog rezultata: aplikacija koja koristi relacijsku bazu podataka. Razlika je u tome odakle krećemo i ko pravi strukturu baze.
+
+<h2>Database-First pristup</h2>
+
+Ovaj pristup je upravo ono što smo radili tokom celog kursa. Prvo smo analizirali sistem, nacrtali ER dijagram, preveli ga u tabele, a zatim napisali SQL komande za kreiranje baze i tabela.
+
+Tok rada kod Database-First pristupa izgleda ovako:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Korak</th>
+			<th>Šta se radi</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1</td>
+			<td>Analiziraš sistem i crtaš ER dijagram</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>Prevedeš model u tabele</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>Pišeš SQL komande (CREATE TABLE)</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>Kreiraš bazu u SQL Server-u</td>
+		</tr>
+		<tr>
+			<td>5</td>
+			<td>Kod aplikacije se prilagođava postojećoj bazi</td>
+		</tr>
+	</tbody>
+</table>
+
+Ovde je baza podataka izvor istine. Struktura je definisana u SQL-u, a aplikacija mora da se prilagodi onome što baza očekuje.
+
+Zamislimo da škola već ima bazu sa tabelama Ucenik, Profesor, Predmet i Ocena. Programer koji pravi aplikaciju mora da pogleda kako te tabele izgledaju i da napiše kod koji se uklapa u tu strukturu.
+
+<h2>Code-First pristup</h2>
+
+U Code-First pristupu proces je obrnut. Programer prvo piše klase u programskom jeziku, a zatim ORM alat automatski kreira odgovarajuće tabele u bazi.
+
+Tok rada kod Code-First pristupa izgleda ovako:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Korak</th>
+			<th>Šta se radi</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1</td>
+			<td>Analiziraš sistem i definišeš modele</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>Pišeš klase u C# (ili drugom jeziku)</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>ORM generiše migraciju</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>Baza se automatski kreira iz koda</td>
+		</tr>
+		<tr>
+			<td>5</td>
+			<td>Promene u modelu → nove migracije → baza se ažurira</td>
+		</tr>
+	</tbody>
+</table>
+
+Ovde je kod izvor istine. Programer definiše strukturu kroz klase, a baza se prilagođava kodu.
+
+Na primer, umesto da pišemo SQL komandu za kreiranje tabele Ucenik, mi bismo napisali klasu:
+
+<xmp class="primer_ta">
+public class Ucenik
+{
+    public int Id { get; set; }
+    public string Ime { get; set; }
+    public string Prezime { get; set; }
+    public string Razred { get; set; }
+}
+</xmp>
+
+A zatim bismo pokrenuli komandu koja automatski generiše tabelu u bazi na osnovu ove klase. Nema ručnog pisanja CREATE TABLE.
+
+<h2>Poređenje dva pristupa</h2>
+
+Hajde da uporedimo ova dva pristupa da bude jasnije u čemu se razlikuju.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Pitanje</th>
+			<th>Database-First</th>
+			<th>Code-First</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Ko pravi bazu?</td>
+			<td>Programer ručno, kroz SQL</td>
+			<td>ORM alat automatski, iz koda</td>
+		</tr>
+		<tr>
+			<td>Gde je izvor istine?</td>
+			<td>U bazi podataka</td>
+			<td>U programskom kodu</td>
+		</tr>
+		<tr>
+			<td>Kako se menja struktura?</td>
+			<td>ALTER TABLE u SQL-u</td>
+			<td>Menjamo klasu i kreiramo migraciju</td>
+		</tr>
+		<tr>
+			<td>Potrebno znanje SQL-a?</td>
+			<td>Da, obavezno</td>
+			<td>Korisno, ali ne direktno za kreiranje</td>
+		</tr>
+		<tr>
+			<td>Kontrola nad bazom?</td>
+			<td>Potpuna</td>
+			<td>Delimična, ORM odlučuje o detaljima</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Kada se koristi koji pristup</h2>
+
+U praksi, izbor pristupa zavisi od situacije i tipa projekta.
+
+Database-First se najčešće koristi kada već postoji baza podataka. Na primer, ako škola već godinama koristi neki sistem i ima bazu sa hiljadama podataka, nova aplikacija mora da se poveže na tu postojeću bazu. Takođe se koristi u velikim kompanijama gde postoje specijalisti za baze podataka koji pažljivo dizajniraju strukturu.
+
+Code-First se češće koristi kada se projekat pravi od nule. Ako tim programera počinje novi projekat, lakše im je da sve definišu kroz kod na jednom mestu. Ovaj pristup je veoma popularan u startupima i manjim timovima gde isti ljudi pišu i aplikaciju i definišu strukturu podataka.
+
+<h2>Realni primeri iz prakse</h2>
+
+Zamislimo dva scenarija.
+
+Scenario 1: Tim programera pravi potpuno novu aplikaciju za evidenciju učenika u školi. Nemaju postojeću bazu, kreću od nule. U ovom slučaju Code-First pristup je prirodan izbor. Programeri definišu klase Ucenik, Profesor, Predmet i Ocena u kodu, a baza se automatski kreira.
+
+Scenario 2: Škola već koristi SQL Server bazu sa podacima o učenicima koji su unošeni godinama. Potrebno je napraviti novu web aplikaciju koja pristupa tim podacima. U ovom slučaju Database-First je logičan izbor jer baza već postoji i treba je koristiti onakvu kakva jeste.
+
+<div class="napomena">
+Učenici ponekad misle da je Code-First pristup „bolji" jer je moderniji. To nije tačno. Oba pristupa imaju svoju primenu. U profesionalnom radu važno je da razumeš oba i da znaš izabrati pravi pristup za datu situaciju. Zato je znanje SQL-a i projektovanja baze koje ste stekli kroz ovaj kurs jednako važno kao i rad kroz kod.
+</div>
+
+<h2>Oba pristupa zahtevaju razumevanje baze</h2>
+
+Bez obzira na to koji pristup koristiš, jedno ostaje isto: moraš razumeti kako relacijska baza funkcioniše. Primarni ključevi, strani ključevi, relacije i normalizacija važe u oba slučaja. Code-First pristup samo menja način na koji definišeš strukturu, ali pravila projektovanja ostaju ista.
+
+Razmisli o ovome: da li bi mogao da napišeš dobre klase za Code-First pristup ako ne razumeš šta su entiteti, atributi i relacije? Odgovor je jasan: ne bi.
+
+<h2>Šta sledi dalje</h2>
+
+U narednoj lekciji ćemo se upoznati sa Entity Framework Core, konkretnim ORM alatom koji se koristi u C# projektima. Videćemo kako se povezuje sa bazom i upoznaćemo osnovne koncepte: DbContext i DbSet.
+
+<div class="zadatak">
+Objasni svojim rečima razliku između Database-First i Code-First pristupa.
+
+Navedi situaciju u kojoj bi bilo bolje koristiti Database-First pristup i obrazloži zašto.
+
+Navedi situaciju u kojoj bi bilo bolje koristiti Code-First pristup i obrazloži zašto.
+
+U kom pristupu je baza podataka izvor istine, a u kom je to kod? Objasni šta to znači u praksi.
+</div>

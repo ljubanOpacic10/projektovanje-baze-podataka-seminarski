@@ -1,0 +1,277 @@
+<h1>Rad sa podacima kroz ORM</h1>
+
+U prethodnoj lekciji naučili smo kako se pomoću migracija kreira baza podataka iz koda. Sada imamo bazu sa tabelama, ali ona je prazna. U ranijim lekcijama koristili smo SQL komande INSERT, SELECT, UPDATE i DELETE za rad sa podacima. Sada ćemo videti kako se iste operacije rade kroz EF Core, koristeći C# kod.
+
+<h2>Četiri osnovne operacije</h2>
+
+Rad sa podacima u bilo kojoj bazi svodi se na četiri osnovne operacije koje se često označavaju skraćenicom CRUD:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Operacija</th>
+			<th>Značenje</th>
+			<th>SQL komanda</th>
+			<th>EF Core metod</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Create</td>
+			<td>Dodavanje podataka</td>
+			<td>INSERT</td>
+			<td>Add</td>
+		</tr>
+		<tr>
+			<td>Read</td>
+			<td>Čitanje podataka</td>
+			<td>SELECT</td>
+			<td>ToList, Find, Where</td>
+		</tr>
+		<tr>
+			<td>Update</td>
+			<td>Izmena podataka</td>
+			<td>UPDATE</td>
+			<td>Promena svojstva + SaveChanges</td>
+		</tr>
+		<tr>
+			<td>Delete</td>
+			<td>Brisanje podataka</td>
+			<td>DELETE</td>
+			<td>Remove</td>
+		</tr>
+	</tbody>
+</table>
+
+Za sve primere koristićemo SkolaContext koji smo definisali u ranijim lekcijama:
+
+<xmp class="primer_ta">
+using (var context = new SkolaContext())
+{
+    // ovde radimo sa podacima
+}
+</xmp>
+
+Ovaj blok koda otvara vezu ka bazi i na kraju je automatski zatvara. To je standardan način rada sa DbContext-om.
+
+<h2>Dodavanje podataka (Add)</h2>
+
+U SQL-u smo podatke unosili ovako:
+
+<xmp class="primer_ta">
+INSERT INTO Ucenik (ime, prezime, razred)
+VALUES ('Marko', 'Markovic', 'I1');
+</xmp>
+
+U EF Core-u isti posao radimo kroz C# kod:
+
+<xmp class="primer_ta">
+using (var context = new SkolaContext())
+{
+    var ucenik = new Ucenik
+    {
+        Ime = "Marko",
+        Prezime = "Markovic",
+        Razred = "I1"
+    };
+
+    context.Ucenici.Add(ucenik);
+    context.SaveChanges();
+}
+</xmp>
+
+Šta se ovde dešava? Kreiramo objekat klase Ucenik i postavljamo mu svojstva. Metodom Add dodajemo ga u DbSet. Ali to samo govori EF Core-u da treba da ga zapamti. Podatak se zaista upisuje u bazu tek kada pozovemo SaveChanges.
+
+SaveChanges je komanda koja šalje sve pripremljene promene u bazu. Ako zaboraviš da je pozoveš, ništa neće biti sačuvano.
+
+<h2>Čitanje podataka (LINQ)</h2>
+
+U SQL-u smo podatke čitali pomoću SELECT komande. U EF Core-u koristimo LINQ, koji je ugrađen u C# jezik i omogućava pretragu podataka na veoma čitljiv način.
+
+Čitanje svih učenika:
+
+<xmp class="primer_ta">
+// SQL: SELECT * FROM Ucenici
+var sviUcenici = context.Ucenici.ToList();
+</xmp>
+
+Čitanje učenika iz određenog razreda:
+
+<xmp class="primer_ta">
+// SQL: SELECT * FROM Ucenici WHERE Razred = 'I1'
+var ucenici = context.Ucenici
+    .Where(u => u.Razred == "I1")
+    .ToList();
+</xmp>
+
+Pronalaženje jednog učenika po Id-u:
+
+<xmp class="primer_ta">
+// SQL: SELECT * FROM Ucenici WHERE Id = 1
+var ucenik = context.Ucenici.Find(1);
+</xmp>
+
+Čitanje samo imena i prezimena:
+
+<xmp class="primer_ta">
+// SQL: SELECT Ime, Prezime FROM Ucenici
+var imena = context.Ucenici
+    .Select(u => new { u.Ime, u.Prezime })
+    .ToList();
+</xmp>
+
+Primeti kako je svaki LINQ upit veoma sličan odgovarajućem SQL upitu. Where odgovara WHERE uslovu, Select odgovara listi kolona, a ToList izvršava upit i vraća rezultate.
+
+<h2>Čitanje povezanih podataka</h2>
+
+Jedna od velikih prednosti ORM-a je lak rad sa povezanim podacima. Na primer, ako želimo da učitamo učenika zajedno sa njegovim ocenama:
+
+<xmp class="primer_ta">
+// učitaj učenika i njegove ocene
+var ucenik = context.Ucenici
+    .Include(u => u.Ocene)
+    .FirstOrDefault(u => u.Id == 1);
+</xmp>
+
+Metod Include govori EF Core-u da pored učenika učita i njegove ocene u jednom koraku. Bez Include, ocene ne bi bile automatski učitane.
+
+Za istu stvar u SQL-u bi morali da pišemo JOIN:
+
+<xmp class="primer_ta">
+SELECT u.*, o.*
+FROM Ucenici u
+JOIN Ocene o ON u.Id = o.UcenikId
+WHERE u.Id = 1;
+</xmp>
+
+EF Core ovo radi umesto nas.
+
+<h2>Izmena podataka (Update)</h2>
+
+U SQL-u smo podatke menjali ovako:
+
+<xmp class="primer_ta">
+UPDATE Ucenik SET razred = 'II1' WHERE id_ucenik = 1;
+</xmp>
+
+U EF Core-u, najpre pronađemo objekat, promenimo mu svojstvo i sačuvamo:
+
+<xmp class="primer_ta">
+using (var context = new SkolaContext())
+{
+    var ucenik = context.Ucenici.Find(1);
+    ucenik.Razred = "II1";
+    context.SaveChanges();
+}
+</xmp>
+
+EF Core prati sve promene na objektima. Kada pozoveš SaveChanges, on sam prepozna šta je promenjeno i generiše odgovarajuću UPDATE komandu.
+
+<h2>Brisanje podataka (Remove)</h2>
+
+U SQL-u smo brisali ovako:
+
+<xmp class="primer_ta">
+DELETE FROM Ucenik WHERE id_ucenik = 1;
+</xmp>
+
+U EF Core-u:
+
+<xmp class="primer_ta">
+using (var context = new SkolaContext())
+{
+    var ucenik = context.Ucenici.Find(1);
+    context.Ucenici.Remove(ucenik);
+    context.SaveChanges();
+}
+</xmp>
+
+Prvo pronađemo objekat, zatim ga uklonimo iz DbSet-a pomoću Remove, i na kraju sačuvamo promene. EF Core generiše DELETE komandu.
+
+<h2>Uporedni pregled: SQL vs EF Core</h2>
+
+Hajde da na jednom mestu uporedimo sve četiri operacije:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Operacija</th>
+			<th>SQL</th>
+			<th>EF Core</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Dodavanje</td>
+			<td>INSERT INTO ... VALUES ...</td>
+			<td>Add + SaveChanges</td>
+		</tr>
+		<tr>
+			<td>Čitanje svih</td>
+			<td>SELECT * FROM ...</td>
+			<td>.ToList()</td>
+		</tr>
+		<tr>
+			<td>Filtriranje</td>
+			<td>SELECT ... WHERE ...</td>
+			<td>.Where(...).ToList()</td>
+		</tr>
+		<tr>
+			<td>Izmena</td>
+			<td>UPDATE ... SET ... WHERE ...</td>
+			<td>Promena svojstva + SaveChanges</td>
+		</tr>
+		<tr>
+			<td>Brisanje</td>
+			<td>DELETE FROM ... WHERE ...</td>
+			<td>Remove + SaveChanges</td>
+		</tr>
+	</tbody>
+</table>
+
+<div class="napomena">
+Najčešća greška kod učenika je da zaborave da pozovu SaveChanges nakon što dodaju, izmene ili obrišu podatke. Bez te komande, promene ostaju samo u memoriji i nikada se ne primenjuju na bazu. Svaki put kada menjaš podatke, na kraju mora da stoji SaveChanges.
+</div>
+
+<h2>Primer: rad sa ocenama učenika</h2>
+
+Pogledajmo malo složeniji primer. Želimo da dodamo ocenu učeniku i zatim prikažemo sve ocene za tog učenika:
+
+<xmp class="primer_ta">
+using (var context = new SkolaContext())
+{
+    // dodajemo ocenu učeniku sa Id = 1 iz predmeta sa Id = 1
+    var ocena = new Ocena
+    {
+        Vrednost = 5,
+        Datum = DateTime.Now,
+        UcenikId = 1,
+        PredmetId = 1
+    };
+    context.Ocene.Add(ocena);
+    context.SaveChanges();
+
+    // čitamo sve ocene za učenika sa Id = 1
+    var ocene = context.Ocene
+        .Where(o => o.UcenikId == 1)
+        .ToList();
+}
+</xmp>
+
+Primeti kako koristimo strane ključeve (UcenikId i PredmetId) na isti način kao u SQL-u, ali bez pisanja SQL-a.
+
+<h2>Šta sledi dalje</h2>
+
+U narednoj lekciji ćemo napraviti celovito poređenje SQL i ORM pristupa. Videćemo kada je bolje koristiti SQL, kada ORM, i kako se u praksi ova dva pristupa kombinuju.
+
+<div class="zadatak">
+Napiši EF Core kod koji dodaje novog profesora sa imenom Jovan i prezimenom Jovanović u bazu.
+
+Napiši EF Core kod koji prikazuje sve učenike iz razreda „II2".
+
+Napiši EF Core kod koji menja prezime učenika sa Id = 2 u „Nikolić".
+
+Napiši EF Core kod koji briše profesora sa Id = 3 iz baze.
+
+Za svaki od ova četiri zadatka, napiši i odgovarajuću SQL komandu koja radi istu stvar.
+</div>

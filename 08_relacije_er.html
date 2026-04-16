@@ -12,9 +12,15 @@ Postoje tri osnovna tipa relacija koje smo već uveli: jedan prema jedan (1:1), 
 
 Relacija jedan prema jedan (1:1) znači da je jedna pojava jednog tipa entiteta povezana sa najviše jednom pojavom drugog tipa entiteta i obrnuto. U ovim situacijama treba da obratimo pažnju jer ove veze često ukazuju na to da možda imamo suvišne tipove entiteta ili da bi trebalo da ih spojimo. Na primer, ako imamo tip entiteta Student i tip entiteta Indeks, i svaki student ima tačno jedan indeks, a svaki indeks pripada tačno jednom studentu, onda je veza između njih 1:1.
 
+Kada se u praksi srećemo sa relacijom 1:1, to je dobar trenutak da se zapitamo: da li su ova dva entiteta zapravo jedan? Ako Student i Indeks uvek idu zajedno, možda je lakše da podatke o indeksu uključimo kao atribute entiteta Student. Međutim, postoje situacije u kojima ima smisla zadržati dva odvojena entiteta čak i u relaciji 1:1. Na primer, ako jedan od entiteta ima mnogo atributa ili ako želimo da ograničimo pristup nekim podacima. U školskom sistemu, možemo zamisliti da entitet Učenik ima osnovne podatke, dok zaseban entitet Zdravstveni karton sadrži osetljive podatke koje ne bi trebalo da vidi svako ko ima pristup podacima o učenicima.
+
 Relacija jedan prema više (1:N) znači da jedna pojava jednog tipa entiteta može biti povezana sa više pojava drugog tipa entiteta, dok svaka od tih pojava pripada samo jednoj pojavi iz prve grupe. Na primer, jedna pojava tipa entiteta Profesor može biti povezana sa više pojava tipa entiteta Predmet, dok svaki predmet pripada jednom profesoru.
 
+Relacija 1:N je najzastupljeniji tip relacije u većini informacionih sistema. U školskom sistemu možemo naći mnogo primera: jedno odeljenje ima više učenika, ali svaki učenik pripada jednom odeljenju. Jedan predmet ima više ocena, ali svaka ocena pripada jednom predmetu. Budući da je ovaj tip relacije toliko čest, važno je da ga dobro razumemo.
+
 Relacija više prema više (N:M) znači da više pojava jednog tipa entiteta može biti povezano sa više pojava drugog tipa entiteta. Na primer, jedna pojava tipa entiteta Učenik može biti povezana sa više pojava tipa entiteta Predmet, a jedna pojava tipa entiteta Predmet može biti povezana sa više pojava tipa entiteta Učenik.
+
+Relacija N:M je posebno zanimljiva jer se ne može direktno implementirati u relacionoj bazi podataka. Razmišljajmo o tome zašto. U tabeli možemo da stavimo strani ključ koji pokazuje na drugu tabelu, ali jedan red može da sadrži samo jednu vrednost stranog ključa. Ako učenik sluša pet predmeta, ne možemo u jednom redu tabele Učenik da nabrojimo svih pet. Zato se relacija N:M uvek razlaže na dve relacije 1:N pomoću posredničke tabele, ali o tome ćemo detaljnije u lekciji o prevođenju ER dijagrama u tabele.
 
 <table class="tabela">
   <thead>
@@ -46,13 +52,19 @@ Relacija više prema više (N:M) znači da više pojava jednog tipa entiteta mo�
 <h2>Tipovi poveznika na ER dijagramu</h2>
 Pored podele prema kardinalnosti, relacije možemo posmatrati i kroz različite tipove poveznika na ER dijagramu. Ovi tipovi nam pomažu da preciznije modelujemo različite situacije iz realnog sveta.
 
-Najjednostavniji je osnovni tip poveznika. To je poveznica koja povezuje dva tipa entiteta. Na primer, poveznica između tipa entiteta Profesor i tipa entiteta Predmet predstavlja osnovni tip poveznika jer uključuje dva tipa entiteta.
+Najjednostavniji je osnovni tip poveznika. To je poveznica koja povezuje dva tipa entiteta. Na primer, poveznica između tipa entiteta Profesor i tipa entiteta Predmet predstavlja osnovni tip poveznika jer uključuje dva tipa entiteta. Ovaj tip je daleko najčešći i većina relacija u jednom sistemu pripada ovoj kategoriji. Kada kažemo "relacija", obično mislimo upravo na binarni (osnovni) poveznik.
 
 Postoje i n-arni tipovi poveznika. To su poveznice koje povezuju tri ili više tipova entiteta. Na primer, možemo imati poveznicu koja uključuje tip entiteta Učenik, tip entiteta Predmet i tip entiteta Profesor, ako želimo da zabeležimo ko je predavao određeni predmet određenom učeniku. U ovakvim situacijama nije dovoljno koristiti samo binarne veze, već uvodimo poveznicu koja obuhvata više tipova entiteta istovremeno.
 
+Zašto ne bismo mogli da ovu situaciju rešimo sa dve binarne veze? Probajmo da razmislimo. Ako napravimo samo vezu Učenik-Predmet i vezu Profesor-Predmet, znamo ko sluša koji predmet i ko predaje koji predmet, ali ne znamo tačno ko je predavao konkretnom učeniku. To može biti važno ako isti predmet predaju dva profesora različitim grupama učenika. U tim slučajevima n-arni poveznik tačno prikazuje stvarnu situaciju.
+
 Još jedan važan tip je rekurzivni tip poveznika. To je situacija kada je tip entiteta povezan sam sa sobom. Na primer, u informacionom sistemu za školu možemo imati tip entiteta Profesor, gde jedan profesor može biti mentor drugom profesoru. U ovom slučaju, poveznica povezuje pojave istog tipa entiteta.
 
+Rekurzivne veze na početku mogu delovati zbunjujuće, ali su zapravo sasvim logične. Ključ je da razumemo da tip entiteta opisuje kategoriju objekata, a ne jedan konkretan objekat. Dakle, veza "Profesor mentoriše Profesora" znači da jedna konkretna pojava tipa Profesor (na primer, profesor Petrović) mentoriše drugu konkretnu pojavu istog tipa (na primer, profesora Nikolića). Drugi primer iz školskog sistema: učenik može biti drug u klupi drugom učeniku, što je opet rekurzivna veza na tipu entiteta Učenik.
+
 Postoji i koncept slabog tipa poveznika, koji se javlja u situacijama kada jedna veza zavisi od postojanja druge. Ovo se obično odnosi na slučajeve kada određeni tip entiteta ne može postojati samostalno bez veze sa drugim tipom entiteta. Na primer, možemo posmatrati ocenu kao nešto što ne može postojati bez učenika i predmeta. U takvim situacijama veza ima poseban značaj jer zavisi od drugih elemenata sistema.
+
+Slab tip entiteta je entitet koji nema sopstveni ključ koji bi ga učinio jedinstvenim. On zavisi od drugog, jakog tipa entiteta da bi bio identifikovan. Na primer, ako numerisanje ocena kreće iznova za svakog učenika (ocena broj 1 za Marka, ocena broj 1 za Anu), onda Ocena ne može biti jednoznačno određena samo brojem ocene, već joj treba i informacija o učeniku. Na dijagramu, slab tip entiteta se prikazuje pravougaonikom sa dvostrukom linijom, a poveznik ka jakom entitetu se takođe prikazuje dvostrukom linijom.
 
 <h2>Gerund ili asocijativni entitet</h2>
 Sada dolazimo do jednog malo složenijeg, ali veoma važnog koncepta. Razmotrimo relaciju između tipa entiteta Učenik i tipa entiteta Predmet. Kao što smo rekli, to je relacija više prema više. Međutim, šta ako želimo da toj vezi dodamo dodatne informacije, na primer datum kada je učenik dobio ocenu ili samu vrednost ocene?
@@ -61,7 +73,16 @@ U tom trenutku dolazimo do problema. Relacija sama po sebi ne može jednostavno 
 
 Rešenje ovog problema je uvođenje gerunda, odnosno asocijativnog entiteta. Gerund je posebna vrsta entiteta koja nastaje iz relacije kada želimo da tu relaciju posmatramo kao novi tip entiteta. Na primer, relaciju između tipa entiteta Učenik i tipa entiteta Predmet možemo pretvoriti u novi tip entiteta, na primer Ocena. Taj novi tip entiteta može imati svoje atribute, kao što su vrednost ocene ili datum, i može učestvovati u daljim relacijama.
 
-Na ovaj način rešavamo problem kada relacija nije dovoljno "jednostavna", već nosi dodatne informacije koje želimo da modelujemo. Gerund nam omogućava da relaciju tretiramo kao poseban tip entiteta i time dobijemo veću fleksibilnost u modelovanju.
+Hajde da korak po korak prođemo kako nastaje gerund na našem primeru:
+
+1. Prvo imamo relaciju N:M između tipa entiteta Učenik i tipa entiteta Predmet (učenik sluša više predmeta, predmet sluša više učenika).
+2. Zatim shvatamo da uz tu vezu želimo da čuvamo dodatne podatke: koju ocenu je učenik dobio, kog datuma.
+3. Pošto sama linija na dijagramu ne može da nosi te podatke, uvodimo novi entitet Ocena.
+4. Sada umesto jedne relacije N:M imamo dve relacije 1:N: Učenik → Ocena (jedan učenik ima više ocena) i Predmet → Ocena (iz jednog predmeta postoji više ocena).
+
+Primeti da gerund uvek nastaje iz relacije N:M. To je važno pravilo. Uvek kada vidiš relaciju više prema više i potrebu za dodatnim podacima, razmisli o uvođenju gerunda.
+
+Ovo nije samo formalna tehnika, već način razmišljanja koji će ti biti koristan tokom celog kursa. Mnogi sistemi iz realnog sveta imaju relacije koje nose podatke: kupovina ima datum i cenu, zaposlenje ima početni datum i poziciju, rezervacija ima termin i trajanje. U svim tim slučajevima, relacija postaje novi entitet.
 
 <table class="tabela">
   <thead>
@@ -100,6 +121,8 @@ Na ovaj način rešavamo problem kada relacija nije dovoljno "jednostavna", već
 Kako bismo ovo rešili kada relacija ima svoje atribute, kao što su datum i vrednost ocene?
 
 Da li u tvom modelu postoji neka veza koja zapravo treba da postane novi tip entiteta?
+
+Razmisli i o ovome: u školskom sistemu, ako bismo hteli da pratimo prisustvo učenika na časovima, da li bi to bila obična relacija između Učenika i Predmeta, ili bismo morali da uvedemo novi entitet? Koji dodatni podaci bi bili vezani za tu vezu (datum časa, da li je učenik bio prisutan, razlog izostanka)?
 
 <div class="napomena">
 Učenici često prave grešku tako što pokušavaju da sve relacije posmatraju kao jednostavne veze između dva tipa entiteta. Međutim, u složenijim sistemima često je potrebno koristiti različite tipove poveznika kako bi model bio tačan i potpun.

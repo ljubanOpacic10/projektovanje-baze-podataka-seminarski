@@ -19,6 +19,10 @@ Sa druge strane, svaka pojava tipa entiteta Predmet može biti povezana sa jedno
 
 Na ovaj način kardinalnost precizira ono što smo ranije opisivali kao 1:1, 1:N ili N:M.
 
+Važno je razumeti da kardinalnost uvek posmatramo iz perspektive jedne strane relacije. Kada kažemo "jedan profesor može predavati više predmeta", mi posmatramo relaciju iz perspektive profesora. Kada kažemo "jedan predmet predaje tačno jedan profesor", posmatramo istu relaciju iz perspektive predmeta. Obe informacije zajedno nam daju kompletnu sliku.
+
+Postoji koristan trik za određivanje kardinalnosti: za svaku stranu relacije postavi pitanje "za jednu pojavu ovog tipa entiteta, koliko pojava onog drugog tipa entiteta može biti povezano?" Ako je odgovor "najviše jedna", to je strana 1. Ako je odgovor "više", to je strana N.
+
 <h2>Šta je opcionalnost</h2>
 Pored maksimalnog broja veza, postoji još jedan važan aspekt koji moramo uzeti u obzir, a to je minimalan broj veza. Ovde dolazimo do pojma opcionalnosti.
 
@@ -32,6 +36,10 @@ Sa druge strane, ako je minimalan broj veza jedan, veza je obavezna. To znači d
 
 Na primer, možemo pretpostaviti da svaka pojava tipa entiteta Ocena mora biti povezana sa tačno jednom pojavom tipa entiteta Učenik. Ocena ne može postojati sama za sebe, već uvek mora pripadati nekom učeniku.
 
+Opcionalnost ima direktne posledice na implementaciju baze. Ako je veza obavezna, to znači da prilikom unosa podataka moramo obezbediti da ta veza postoji. Na primer, ne možemo uneti ocenu u sistem a da ne kažemo kom učeniku pripada. Ako bi to bilo dozvoljeno, imali bismo "sirotčad" u bazi, odnosno ocene koje ne pripadaju nikome, što bi bilo besmisleno.
+
+Sa druge strane, ako je veza opciona, sistem mora biti spreman da neka pojava nema tu vezu. Na primer, novi profesor koji je upravo zaposlen možda još ne predaje nijedan predmet. Sistem mora da dozvoli da takav profesor postoji u bazi bez predmeta.
+
 <h2>Razmišljanje iz oba smera relacije</h2>
 Važno je da uvek razmišljamo iz oba smera relacije.
 
@@ -44,11 +52,49 @@ Sa druge strane, jedna pojava tipa entiteta Predmet može biti povezana sa više
 Kada razmišljamo o minimalnom broju veza, možemo reći da učenik može postojati i bez predmeta u određenom trenutku, kao i da predmet može postojati i bez učenika. U tom slučaju, veza je opciona sa obe strane.
 
 <h2>Kombinovanje minimuma i maksimuma</h2>
-Kombinovanjem minimalnog i maksimalnog broja veza dobijamo potpun opis relacije.
+Kombinovanjem minimalnog i maksimalnog broja veza dobijamo potpun opis relacije. Ovo se često zapisuje u obliku (min, max) za svaku stranu relacije.
 
-Na primer, možemo reći da jedna pojava tipa entiteta Profesor može biti povezana sa nula ili više pojava tipa entiteta Predmet. To znači da profesor može, ali ne mora predavati predmet.
+Na primer, možemo reći da jedna pojava tipa entiteta Profesor može biti povezana sa nula ili više pojava tipa entiteta Predmet. To znači da profesor može, ali ne mora predavati predmet. Zapisujemo kao (0, N).
 
-Sa druge strane, jedna pojava tipa entiteta Predmet mora biti povezana sa tačno jednom pojavom tipa entiteta Profesor, ako želimo da svaki predmet ima svog profesora.
+Sa druge strane, jedna pojava tipa entiteta Predmet mora biti povezana sa tačno jednom pojavom tipa entiteta Profesor, ako želimo da svaki predmet ima svog profesora. Zapisujemo kao (1, 1).
+
+Hajde da prođemo korak po korak kako čitamo ovaj zapis. Kada vidimo oznaku (0, N) pored Profesora u relaciji Profesor-Predmet, to čitamo ovako: "Jedan profesor može biti povezan sa najmanje nula (dakle, ne mora) i najviše N (dakle, više) predmeta." Kada vidimo oznaku (1, 1) pored Predmeta, to čitamo: "Jedan predmet mora biti povezan sa najmanje jednim i najviše jednim profesorom."
+
+Postoje četiri uobičajene kombinacije minimuma i maksimuma:
+
+<table class="tabela">
+  <thead>
+    <tr>
+      <th>Zapis</th>
+      <th>Značenje</th>
+      <th>Primer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>(0, 1)</td>
+      <td>Opciono, najviše jedno</td>
+      <td>Učenik može imati najviše jednog mentora, ali ne mora</td>
+    </tr>
+    <tr>
+      <td>(1, 1)</td>
+      <td>Obavezno, tačno jedno</td>
+      <td>Predmet mora imati tačno jednog profesora</td>
+    </tr>
+    <tr>
+      <td>(0, N)</td>
+      <td>Opciono, može više</td>
+      <td>Profesor ne mora predavati nijedan predmet, ali može više</td>
+    </tr>
+    <tr>
+      <td>(1, N)</td>
+      <td>Obavezno, mora bar jedno, može više</td>
+      <td>Odeljenje mora imati bar jednog učenika</td>
+    </tr>
+  </tbody>
+</table>
+
+Razumevanje ove četiri kombinacije je ključno jer se svaka relacija u sistemu može opisati pomoću dve oznake, po jedne za svaku stranu.
 
 <table class="tabela">
   <thead>
@@ -86,8 +132,25 @@ Kako bismo ovo rešili kada sistem kaže da predmet mora imati profesora, ali pr
 
 Da li svaka relacija u školskom sistemu mora biti obavezna sa obe strane?
 
+Razmisli i o sledećem praktičnom primeru: šta se dešava ako pogrešno definišemo opcionalnost? Ako kažemo da je veza između predmeta i profesora opciona sa strane predmeta (minimum = 0), to znači da sistem dozvoljava predmet bez profesora. U praksi, to bi značilo da u rasporedu časova može da postoji predmet za koji niko nije zadužen. Da li je to prihvatljivo u našem sistemu? Ovakva pitanja nam pomažu da dobro razmislimo pre nego što donesemo odluku.
+
+<h2>Kako pravilno analizirati relaciju korak po korak</h2>
+Evo recepta koji možeš da koristitiš za bilo koju relaciju u sistemu:
+
+1. Identifikuj dva tipa entiteta koja su u relaciji (na primer, Profesor i Predmet).
+2. Postavi pitanje iz perspektive prvog entiteta: "Za jednog profesora, koliko predmeta može da predaje?" Odgovor daje maksimum sa strane profesora.
+3. Postavi pitanje: "Da li profesor mora da predaje bar jedan predmet?" Odgovor daje minimum sa strane profesora.
+4. Ponovi korake 2 i 3 iz perspektive drugog entiteta: "Za jedan predmet, koliko profesora može da ga predaje?" i "Da li predmet mora da ima profesora?"
+5. Zapiši rezultat u obliku (min, max) za svaku stranu.
+
+Ako primeniš ovaj postupak na relaciju Profesor-Predmet u našem školskom sistemu, dobićeš: Profesor (0, N) i Predmet (1, 1).
+
 <div class="napomena">
 Učenici često prave grešku tako što razmatraju samo maksimalan broj veza i zanemaruju minimalan. Na primer, kažu da je relacija jedan prema više, ali ne razmišljaju o tome da li je veza obavezna ili opciona. Međutim, ova informacija je veoma važna jer utiče na to kako ćemo kasnije implementirati bazu podataka.
+
+Druga česta greška je razmišljanje samo iz jednog smera. Uvek razmisli iz oba smera relacije. Na primer, ne bavi se samo pitanjem "koliko predmeta predaje jedan profesor" već i "koliko profesora predaje jedan predmet".
+
+Treća greška je mešanje poslovnih pravila sa tehničkim ograničenjima. Kardinalnost i opcionalnost proističu iz pravila sistema koji modelujemo, a ne iz toga šta je tehnički moguće. Na primer, tehnički je moguće da predmet nema profesora, ali pravila škole kažu da svaki predmet mora imati predavača.
 </div>
 
 <h2>Kako lakše odrediti kardinalnost i opcionalnost</h2>
@@ -105,12 +168,15 @@ Za informacioni sistem za školu razmotri sledeće relacije:
 
 Učenik i Ocena
 Profesor i Predmet
+Učenik i Predmet (preko gerunda Ocena)
 
-Za svaku relaciju napiši:
+Za svaku relaciju:
 
-maksimalan broj veza sa obe strane
-minimalan broj veza sa obe strane
-objasni da li je veza obavezna ili opciona i zašto
+1. Napiši maksimalan broj veza sa obe strane
+2. Napiši minimalan broj veza sa obe strane
+3. Zapiši rezultat u obliku (min, max) za svaku stranu
+4. Objasni da li je veza obavezna ili opciona i zašto
+5. Pokušaj da objasniš šta bi se desilo u praksi ako bismo pogrešno odredili opcionalnost (na primer, šta ako dozvolimo da ocena postoji bez učenika)
 
 Pokušaj da precizno objasniš da li pojava jednog tipa entiteta mora imati ili može imati vezu sa pojavom drugog tipa entiteta.
 </div>

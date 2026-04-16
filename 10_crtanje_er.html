@@ -11,6 +11,17 @@ Zamislimo informacioni sistem za školu u kojem želimo da pratimo učenike, pro
 
 Kako iz ovakvog opisa realnog sistema dolazimo do pravilnog ER dijagrama? Kako da prepoznamo koje tipove entiteta crtamo, koje atribute dodajemo i na koji način povezujemo delove sistema?
 
+<h2>Metodologija: od teksta do dijagrama</h2>
+Pre nego što krenemo da rešavamo naš školski primer, hajde da definišemo opšti postupak koji možeš da primeniš na bilo koji sistem. Ovaj postupak se sastoji od četiri faze koje ćemo primeniti korak po korak.
+
+Prva faza je čitanje i razumevanje opisa. Pažljivo pročitaj opis sistema i podvuci sve imenice. Imenice su kandidati za entitete. Na primer, u našem opisu: učenik, profesor, predmet, ocena, ime, prezime, razred, naziv, vrednost, datum. Sada razmisli: koje od ovih imenica predstavljaju objekte o kojima čuvamo više podataka (entiteti), a koje su samo osobine tih objekata (atributi)?
+
+Druga faza je identifikovanje entiteta i atributa. Od prethodne liste imenica, razdvajamo entitete od atributa. Učenik je entitet jer imamo više učenika i svaki ima više podataka. Ime je atribut jer je to osobina učenika. Ne postoji pravilo koje kaže "ovo je uvek entitet", već zavisi od konteksta. Ako neka imenica ima sopstvene podatke i više pojava u sistemu, verovatno je entitet.
+
+Treća faza je utvrđivanje relacija. Potraži glagole u opisu sistema. Glagoli često ukazuju na relacije: "predaje", "pohađa", "dobija". "Profesor predaje predmet" nam govori da postoji relacija između profesora i predmeta. "Učenik dobija ocenu iz predmeta" nam govori da postoji relacija koja uključuje učenika, predmet i ocenu.
+
+Četvrta faza je preciziranje detalja. Za svaku relaciju odredi kardinalnost i opcionalnost ili razmisli o tome da li relacija ima sopstvene atribute i da li treba uvesti gerund.
+
 <h2>Objašnjenje kroz mini projekat</h2>
 Jedan Učenik može pohađati više Predmeta. Sa druge strane, jedan Predmet može biti slušan od strane više Učenika. Ova veza predstavlja relaciju više prema više.
 
@@ -19,6 +30,8 @@ Pored toga, jedan Profesor može predavati više Predmeta. Svaki predmet predaje
 Sada dolazimo do važnog dela sistema. Potrebno je da zabeležimo ocene koje učenici dobijaju iz predmeta. Kao što smo ranije videli, relacija između tipa entiteta Učenik i tipa entiteta Predmet sama po sebi nije dovoljna jer želimo da čuvamo dodatne informacije, kao što su vrednost ocene i datum kada je ocena dodeljena.
 
 Zbog toga uvodimo novi tip entiteta, koji možemo nazvati Ocena. Ovaj tip entiteta predstavlja gerund, jer nastaje iz relacije između tipa entiteta Učenik i tipa entiteta Predmet. Svaka pojava tipa entiteta Ocena povezana je sa tačno jednom pojavom tipa entiteta Učenik i tačno jednom pojavom tipa entiteta Predmet. Pored toga, svaka ocena ima svoje atribute, kao što su vrednost i datum.
+
+Hajde da zastanemo i razmislimo zašto smo baš ovako odlučili. Mogli smo da probamo i drugačiji pristup. Na primer, mogli smo da za svakog učenika čuvamo listu ocena kao više-vrednosni atribut. Ali to bi bilo pogresišno jer bi tada izgubili informaciju iz kog predmeta je ocena. Mogli smo da u entitetu Učenik napravimo atribute "ocena_iz_matematike", "ocena_iz_fizike" itd., ali šta ako se doda novi predmet? Morali bismo da menjamo strukturu. Uvođenje gerunda Ocena rešava sve ove probleme na elegantan način.
 
 Na ovaj način rešavamo problem relacije više prema više tako što uvodimo novi tip entiteta koji omogućava da relacija ima svoje atribute i učestvuje u daljem modelovanju.
 
@@ -91,6 +104,23 @@ Važno je primetiti da smo relaciju između tipa entiteta Učenik i tipa entitet
 
 Ako pažljivo pogledaš ovaj model, videćeš da on verno odražava pravila informacionog sistema za školu. Svaki deo sistema ima svoje mesto, a veze između delova su jasno definisane.
 
+<h2>Provera ispravnosti dijagrama</h2>
+Kada završimo dijagram, važno je da ga proverimo. Evo nekoliko pitanja koja možemo da postavimo kako bismo se uverili da je dijagram ispravan:
+
+1. Da li svaki entitet ima ključ? Svaki entitet mora imati način da se razlikuje od drugih pojava istog tipa. Na primer, Učenik mora imati ID ili matični broj.
+
+2. Da li smo pokrili sve podatke iz opisa sistema? Proveri da li postoji neki podatak iz originalnog opisa koji nismo uključili u dijagram. Ako da, verovatno nedostaje atribut ili čak ceo entitet.
+
+3. Da li svaka relacija ima definisanu kardinalnost i opcionalnost? Relacija "Profesor-Predmet" bez ovih informacija je nepotpuna.
+
+4. Da li smo ispravno odlučili šta je entitet, a šta atribut? Razmisli da li bi neki atribut zapravo trebalo da bude zaseban entitet, ili obrnuto.
+
+5. Da li model dozvoljava neku situaciju koja nema smisla u realnom sistemu? Na primer, da li model dozvoljava da ocena postoji bez učenika? Ako da, nešto je pogrešno.
+
+6. Da li model zabranjuje neku situaciju koja je zapravo validna? Na primer, da li model zabranjuje da profesor ne predaje nijedan predmet? Ako da, a u praksi to može da se desi (novi profesor), onda model nije tačan.
+
+Ovakva provera je suštinski deo procesa modelovanja. Dobar model nije samo onaj koji "izgleda lepo na dijagramu", već onaj koji verno odražava pravila realnog sistema koji modelujemo.
+
 U ovom trenutku je najvažnije da razumeš kako se iz opisa realnog sistema dolazi do ER dijagrama. Ne radi se samo o crtanju, već o pravilnom razmišljanju i analizi problema.
 
 <img src="images/er-dijagram.png" alt="" class="img fluid-velicina">
@@ -99,6 +129,10 @@ U ovom trenutku je najvažnije da razumeš kako se iz opisa realnog sistema dola
 Učenici često prave grešku tako što odmah počnu da crtaju dijagram, a da pre toga nisu dovoljno jasno analizirali pravila sistema. Zbog toga se često dešava da izostave važan tip entiteta, pogrešno odrede tip relacije ili zaborave da navedu kardinalnost i opcionalnost.
 
 Posebno obrati pažnju na situacije u kojima relacija ima svoje podatke. Tada nije dovoljno nacrtati samo jednostavnu poveznicu, već treba razmisliti da li je potrebno uvesti novi tip entiteta, kao što je ovde Ocena.
+
+Još jedna česta greška je pravljenje previše entiteta. Ne treba svaki podatak pretvarati u entitet. Na primer, razred učenika je u našem sistemu samo atribut, a ne zaseban entitet. Ali ako bismo želeli da za svaki razred čuvamo dodatne informacije (ko je razredni starešina, koja je učionica), onda bi Razred mogao da postane entitet. Odluka zavisi od zahteva sistema.
+
+Takođe, ne zaboravi da dijagram treba da bude čitljiv. Ako crtaš na papiru, rasporedi entitete tako da se linije ne preklapaju. Ključne entitete postavi u centar, a manje važne na periferiju. Ovo ne utiče na tačnost dijagrama, ali mnogo utiče na to koliko lako neko može da ga pročita i razume.
 </div>
 
 <h2>Najava sledeće lekcije</h2>
@@ -112,6 +146,17 @@ Na osnovu opisa iz ove lekcije pokušaj da nacrtaš ER dijagram informacionog si
 Dijagram treba da sadrži:
 
 * tipove entiteta sa njihovim atributima
+* ključeve za svaki entitet (podvučeni atribut)
 * sve poveznike između tipova entiteta
-* jasno naznačenu kardinalnost i opcionalnost za svaku vezu
+* jasno naznačenu kardinalnost i opcionalnost za svaku vezu u obliku (min, max)
+
+Nakon što nacrtaš dijagram, proveri ga pomoću sledećih pitanja:
+
+1. Da li svaki entitet ima ključ?
+2. Da li su pokriveni svi podaci iz opisa sistema?
+3. Da li svaka relacija ima definisanu kardinalnost i opcionalnost?
+4. Da li model dozvoljava neku situaciju koja nema smisla?
+5. Da li model zabranjuje neku situaciju koja bi trebalo da bude dozvoljena?
+
+Ako pronađeš problem kroz ova pitanja, ispravi dijagram.
 </div>

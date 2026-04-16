@@ -1,0 +1,182 @@
+<h1>Šta je ORM i zašto se koristi</h1>
+
+Kroz prethodne lekcije naučili smo kako da projektujemo bazu podataka, od analize sistema i crtanja ER dijagrama, preko normalizacije, pa sve do implementacije u SQL-u. Pisali smo SQL komande za kreiranje tabela, unos podataka i pretragu. Sve to smo radili direktno u SQL Server Management Studio-u.
+
+Ali šta se dešava kada bazu treba da koristimo u pravoj aplikaciji? Zamisli da praviš aplikaciju za školu u nekom programskom jeziku, na primer u C#. Kako bi iz te aplikacije uneli novog učenika u bazu? Kako bi prikazali listu svih učenika?
+
+<h2>Problem: ručno pisanje SQL-a u aplikaciji</h2>
+
+Jedan pristup bi bio da u svom programskom kodu pišeš SQL komande kao tekst i šalješ ih bazi podataka. Na primer, ako koristiš C#, to bi moglo da izgleda ovako:
+
+<xmp class="primer_ta">
+string upit = "INSERT INTO Ucenik (ime, prezime, razred) VALUES ('Marko', 'Markovic', 'I1')";
+// ... šalješ ovaj tekst bazi na izvršavanje
+</xmp>
+
+Na prvi pogled ovo deluje jednostavno, ali u praksi brzo postaje komplikovano. Svaki put moraš da vodiš računa o tačnoj sintaksi SQL-a, o navodnicima, o redosledu kolona. Ako se tabela promeni, moraš da pronađeš i izmeniš svaki upit u kodu. Što je aplikacija veća, to postaje sve teže.
+
+Šta ako bi postojao način da sa bazom radiš kroz objekte u programskom jeziku, bez ručnog pisanja SQL-a?
+
+<h2>Šta je ORM</h2>
+
+ORM je skraćenica od Object-Relational Mapping, što u prevodu znači objektno-relaciono mapiranje.
+
+Ideja je jednostavna: umesto da pišeš SQL komande, ti radiš sa objektima u svom programskom jeziku, a ORM alat u pozadini prevodi te operacije u odgovarajuće SQL komande.
+
+ORM pravi vezu između sveta baze podataka i sveta programiranja. Svaka tabela u bazi odgovara jednoj klasi u kodu, svaki red u tabeli odgovara jednom objektu, a svaka kolona odgovara jednom svojstvu klase.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Baza podataka</th>
+			<th>Programski kod</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Tabela</td>
+			<td>Klasa</td>
+		</tr>
+		<tr>
+			<td>Red u tabeli</td>
+			<td>Objekat (instanca klase)</td>
+		</tr>
+		<tr>
+			<td>Kolona</td>
+			<td>Svojstvo klase</td>
+		</tr>
+		<tr>
+			<td>Primarni ključ</td>
+			<td>Id svojstvo</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Primer: tabela Ucenik i klasa Ucenik</h2>
+
+Pogledajmo konkretan primer iz našeg školskog sistema.
+
+U bazi imamo tabelu Ucenik sa kolonama id_ucenik, ime, prezime i razred. U SQL-u smo je kreirali ovako:
+
+<xmp class="primer_ta">
+CREATE TABLE Ucenik (
+    id_ucenik INT PRIMARY KEY,
+    ime NVARCHAR(50),
+    prezime NVARCHAR(50),
+    razred NVARCHAR(10)
+);
+</xmp>
+
+U programskom jeziku C# ista ta tabela izgleda kao klasa:
+
+<xmp class="primer_ta">
+public class Ucenik
+{
+    public int IdUcenik { get; set; }
+    public string Ime { get; set; }
+    public string Prezime { get; set; }
+    public string Razred { get; set; }
+}
+</xmp>
+
+Svaka kolona iz tabele postala je jedno svojstvo klase. Kada ORM alat radi sa ovom klasom, on zna da ona odgovara tabeli Ucenik u bazi.
+
+<h2>Kako izgleda rad sa podacima kroz ORM</h2>
+
+Umesto da pišemo SQL komandu za unos podataka, jednostavno kreiramo objekat i kažemo ORM alatu da ga sačuva:
+
+<xmp class="primer_ta">
+// umesto SQL INSERT komande
+var ucenik = new Ucenik
+{
+    Ime = "Marko",
+    Prezime = "Markovic",
+    Razred = "I1"
+};
+// ORM se brine da ovo pretvori u INSERT komandu
+</xmp>
+
+Na sličan način, umesto SELECT upita, možemo da tražimo podatke kroz kod:
+
+<xmp class="primer_ta">
+// umesto SELECT * FROM Ucenik
+var sviUcenici = context.Ucenici.ToList();
+
+// umesto SELECT * FROM Ucenik WHERE razred = 'I1'
+var ucenici = context.Ucenici.Where(u => u.Razred == "I1").ToList();
+</xmp>
+
+ORM u pozadini generiše odgovarajuće SQL komande i šalje ih bazi, ali programer to ne mora da radi ručno.
+
+<h2>Prednosti ORM pristupa</h2>
+
+Zašto se ORM koristi u modernom razvoju? Postoji nekoliko važnih razloga.
+
+Brži razvoj. Umesto da za svaku operaciju pišeš SQL, radiš kroz objekte koji su ti prirodniji ako već znaš programski jezik.
+
+Manje grešaka. ORM sam generiše SQL, pa su manje šanse da pogrešiš sintaksu upita.
+
+Lakše održavanje. Ako se struktura baze promeni, menja se klasa na jednom mestu, a ne desetine SQL upita rasutih po kodu.
+
+Rad kroz kod. Sve je na jednom mestu, u programskom jeziku koji koristiš za ostatak aplikacije.
+
+<h2>Mane ORM pristupa</h2>
+
+Naravno, ORM nije savršen i ima određene nedostatke.
+
+Manja kontrola. Kada pišeš SQL ručno, imaš potpunu kontrolu nad svakim delom upita. ORM ponekad generiše upite koji nisu optimalni.
+
+Performanse. Za jednostavne operacije ORM radi odlično, ali za složene upite nad velikim količinama podataka ručno pisani SQL može biti brži.
+
+Potrebno je razumevanje. Da bi dobro koristio ORM, i dalje moraš da razumeš kako baza radi ispod. Zato je znanje SQL-a koje si stekao veoma važno.
+
+<div class="napomena">
+Česta greška u praksi je da programeri koriste ORM bez razumevanja SQL-a i relacija. Kada nešto ne radi kako treba, ne znaju da pronađu problem jer ne razumeju šta se dešava u pozadini. Zato je redosled učenja koji smo pratili u ovom kursu veoma važan: prvo razumeš bazu, pa tek onda koristiš alate koji ti olakšavaju rad.
+</div>
+
+<h2>Gde se ORM koristi u praksi</h2>
+
+ORM alati postoje za gotovo sve popularne programske jezike. Evo nekih primera:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Programski jezik</th>
+			<th>Popularni ORM alati</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>C#</td>
+			<td>Entity Framework Core</td>
+		</tr>
+		<tr>
+			<td>Java</td>
+			<td>Hibernate</td>
+		</tr>
+		<tr>
+			<td>Python</td>
+			<td>Django ORM, SQLAlchemy</td>
+		</tr>
+		<tr>
+			<td>JavaScript</td>
+			<td>Sequelize, Prisma</td>
+		</tr>
+	</tbody>
+</table>
+
+U ovom kursu koristićemo Entity Framework Core jer radimo sa C# programskim jezikom i Microsoft SQL Server-om, što se prirodno nadovezuje na ono što smo do sada učili.
+
+<h2>Šta sledi dalje</h2>
+
+U narednoj lekciji ćemo uporediti dva pristupa razvoju baze podataka: Database-First pristup koji smo koristili do sada i Code-First pristup koji ćemo tek upoznati. Videćemo kada se koristi koji i kako se razlikuju u praksi.
+
+<div class="zadatak">
+Objasni svojim rečima šta je ORM i koja je osnovna ideja iza tog pristupa.
+
+Za tabelu Profesor sa kolonama id_profesor, ime i prezime, napiši kako bi izgledala odgovarajuća klasa u C#.
+
+Navedi dve prednosti i dva nedostatka korišćenja ORM alata.
+
+Razmisli: da li bi mogao da koristiš ORM a da uopšte ne znaš SQL? Obrazloži svoj odgovor.
+</div>

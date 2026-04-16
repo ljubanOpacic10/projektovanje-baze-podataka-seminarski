@@ -1,0 +1,206 @@
+<h1>Poređenje SQL i ORM pristupa</h1>
+
+Kroz prethodne lekcije upoznali smo dva načina rada sa bazom podataka. U prvom delu kursa koristili smo SQL: pisali smo komande za kreiranje tabela, unos podataka i pretragu. U poslednjih nekoliko lekcija videli smo kako istu stvar možemo da uradimo kroz ORM, tačnije kroz Entity Framework Core. Sada je vreme da oba pristupa stavimo jedan pored drugog i razumemo kada se koji koristi u praksi.
+
+<h2>Podsećanje: šta smo naučili</h2>
+
+Ukratko, prešli smo sledeći put:
+
+U SQL pristupu pisali smo komande ručno. CREATE TABLE za kreiranje tabela, INSERT za unos, SELECT za pretragu, UPDATE za izmenu i DELETE za brisanje. Svaki upit smo izvršavali u SQL Server Management Studio-u.
+
+U ORM pristupu definisali smo klase u C#. Migracije su kreirale bazu umesto nas. Za rad sa podacima koristili smo metode Add, Remove, SaveChanges i LINQ upite. SQL je postojao u pozadini, ali ga nismo ručno pisali.
+
+Oba pristupa su legitimna i koriste se u praksi. Pitanje nije koji je bolji, već koji je prikladniji za datu situaciju.
+
+<h2>Direktno poređenje</h2>
+
+Pogledajmo iste zadatke uradjene na oba načina, jedan pored drugog.
+
+Kreiranje tabele:
+
+<xmp class="primer_ta">
+-- SQL pristup
+CREATE TABLE Ucenik (
+    Id INT PRIMARY KEY IDENTITY,
+    Ime NVARCHAR(50),
+    Prezime NVARCHAR(50),
+    Razred NVARCHAR(10)
+);
+</xmp>
+
+<xmp class="primer_ta">
+// Code-First pristup
+public class Ucenik
+{
+    public int Id { get; set; }
+    public string Ime { get; set; }
+    public string Prezime { get; set; }
+    public string Razred { get; set; }
+}
+// + dotnet ef migrations add
+// + dotnet ef database update
+</xmp>
+
+Unos podataka:
+
+<xmp class="primer_ta">
+-- SQL pristup
+INSERT INTO Ucenik (Ime, Prezime, Razred)
+VALUES ('Ana', 'Petrovic', 'II2');
+</xmp>
+
+<xmp class="primer_ta">
+// ORM pristup
+context.Ucenici.Add(new Ucenik
+{
+    Ime = "Ana",
+    Prezime = "Petrovic",
+    Razred = "II2"
+});
+context.SaveChanges();
+</xmp>
+
+Pretraga sa uslovom:
+
+<xmp class="primer_ta">
+-- SQL pristup
+SELECT Ime, Prezime FROM Ucenik
+WHERE Razred = 'I1';
+</xmp>
+
+<xmp class="primer_ta">
+// ORM pristup
+var ucenici = context.Ucenici
+    .Where(u => u.Razred == "I1")
+    .Select(u => new { u.Ime, u.Prezime })
+    .ToList();
+</xmp>
+
+<h2>Kada koristiti SQL</h2>
+
+SQL pristup ima prednosti u sledećim situacijama:
+
+Složeni upiti. Kada je upit veoma složen, sa više JOIN operacija, grupisanjem i agregatnim funkcijama, nekada je lakše i preglednije da ga napišeš direktno u SQL-u.
+
+Optimizacija performansi. Ako aplikacija radi sa velikim količinama podataka i brzina je kritična, ručno pisani SQL daje veću kontrolu nad time kako se upit izvršava.
+
+Izveštaji i analiza. Za jednokratne analize podataka, poput generisanja izveštaja ili provere stanja u bazi, SQL upiti u SSMS-u su brz i praktičan način.
+
+Rad sa postojećim bazama. Ako baza već postoji i ima složenu strukturu, direktan SQL može biti jasniji za rad.
+
+Administracija baze. Za zadatke poput kreiranja indeksa, podešavanja dozvola ili održavanja baze, SQL je neophodan.
+
+<h2>Kada koristiti ORM</h2>
+
+ORM pristup ima prednosti u sledećim situacijama:
+
+Razvoj aplikacija. Kada praviš aplikaciju koja stalno radi sa bazom, ORM ti omogućava da sve bude u jednom jeziku i na jednom mestu.
+
+Brz razvoj. Za tipične operacije kao što su unos, čitanje i brisanje podataka, ORM je brži za pisanje i lakši za održavanje.
+
+Timski rad. Kada više programera radi na istom projektu, kod sa ORM-om je čitljiviji i lakše se pregleda nego SQL upiti rasuti po aplikaciji.
+
+Novi projekti. Kada krećeš od nule, Code-First pristup sa migracijama omogućava brzu iteraciju i promene strukture.
+
+Manje grešaka. ORM smanjuje mogućnost grešaka u sintaksi SQL-a i pomaže da se promene u modelu automatski prenesu na bazu.
+
+<h2>Kombinovanje oba pristupa</h2>
+
+U praksi se ova dva pristupa često kombinuju. To je potpuno normalno i čak poželjno.
+
+Na primer, aplikacija može koristiti EF Core za svakodnevne operacije: unos novih učenika, prikaz liste, izmenu podataka. Ali za jedan posebno složen izveštaj, programer može napisati ručni SQL upit koji će se izvršiti direktno.
+
+EF Core čak podržava izvršavanje ručnih SQL upita:
+
+<xmp class="primer_ta">
+// izvršavanje ručnog SQL-a kroz EF Core
+var ucenici = context.Ucenici
+    .FromSqlRaw("SELECT * FROM Ucenici WHERE Razred = 'I1'")
+    .ToList();
+</xmp>
+
+Ovo je korisno kada ORM ne može dovoljno dobro da generiše upit koji ti je potreban, ali i dalje želiš da rezultat bude u obliku objekata.
+
+<h2>Pregled prednosti i mana</h2>
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Kriterijum</th>
+			<th>SQL</th>
+			<th>ORM</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Kontrola nad upitom</td>
+			<td>Potpuna</td>
+			<td>Delimična</td>
+		</tr>
+		<tr>
+			<td>Brzina pisanja koda</td>
+			<td>Sporija za tipične operacije</td>
+			<td>Brža za tipične operacije</td>
+		</tr>
+		<tr>
+			<td>Čitljivost</td>
+			<td>Zavisi od složenosti upita</td>
+			<td>Visoka za jednostavne operacije</td>
+		</tr>
+		<tr>
+			<td>Performanse</td>
+			<td>Može biti bolje optimizovan</td>
+			<td>Dovoljan za većinu slučajeva</td>
+		</tr>
+		<tr>
+			<td>Održavanje koda</td>
+			<td>Teže pri čestim promenama</td>
+			<td>Lakše uz migracije</td>
+		</tr>
+		<tr>
+			<td>Potrebno znanje</td>
+			<td>SQL sintaksa</td>
+			<td>Programski jezik + osnove SQL-a</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Realni primeri iz industrije</h2>
+
+Da bismo ovo učinili konkretnijim, pogledajmo kako se ovi pristupi koriste u srednjim i velikim projektima.
+
+Web aplikacija za školu. Korisnici preko pretraživača unose i pregledaju podatke o učenicima. Backend aplikacija koristi EF Core za sve standardne operacije. Kada direktor zatraži poseban izveštaj, programer napiše SQL upit koji ga generiše.
+
+Bankarski sistem. Baze su velike i složene, sa milionima zapisa. Većina operacija koristi optimizovane SQL procedure koje su pisane od strane specijalista za baze podataka. ORM se koristi selektivno za neke delove aplikacije.
+
+Startup koji pravi mobilnu aplikaciju. Tim od tri programera pravi aplikaciju od nule. Koriste Code-First pristup jer im omogućava da brzo menjaju strukturu i dodaju nove funkcionalnosti. SQL koriste samo za dijagnostiku problema.
+
+<div class="napomena">
+Važno je da razumeš da znanje SQL-a nikada nije „izgubljeno" ako koristiš ORM. Naprotiv, programeri koji razumeju SQL mogu mnogo bolje da koriste ORM jer znaju šta se dešava u pozadini. Ako nešto ne radi kako treba, mogu da pogledaju generisani SQL i brzo pronađu problem. Zato su lekcije o SQL-u iz prethodnog modula temelj za sve što dolazi posle.
+</div>
+
+<h2>Završna refleksija</h2>
+
+Kroz ovaj modul prešli smo put od razumevanja šta je ORM, preko poređenja pristupa, do praktičnog rada sa Entity Framework Core-om. Definisali smo modele, pravili migracije, dodavali i čitali podatke.
+
+Najvažnija poruka je da SQL i ORM nisu suprotnosti. Oni su dva alata u istoj kutiji. Dobar programer poznaje oba i zna kada da upotrebi koji.
+
+Razmisli o svom završnom projektu iz prethodnog modula. Kako bi izgledao isti taj sistem da si ga radio Code-First pristupom? Koje klase bi definisao? Kako bi izgledale migracije? To razmišljanje je korak koji te vodi ka profesionalnom razvoju aplikacija.
+
+<h2>Šta sledi dalje</h2>
+
+Ovim završavamo modul o ORM-u i Code-First pristupu. Stekao si osnovno razumevanje modernog rada sa bazama podataka. Sledeći korak u učenju može biti pravljenje kompletne aplikacije koja koristi bazu: web aplikacija sa korisnički interfejsom, poslovnom logikom i bazom podataka u pozadini. Znanje koje si stekao kroz ovaj kurs predstavlja solidan temelj za taj put.
+
+<div class="zadatak">
+Za sledeće zadatke napiši rešenje i u SQL-u i u EF Core-u (C#):
+
+Prikaži sve profesore iz baze.
+
+Pronađi sve učenike koji su u razredu „I1".
+
+Dodaj novog učenika sa imenom „Nikola", prezimenom „Nikolić" i razredom „III1".
+
+Obriši predmet sa Id = 2.
+
+Na osnovu svog završnog projekta (sistem sportskog centra), razmisli i napiši koje klase bi definisao u Code-First pristupu. Za svaku klasu navedi svojstva i navigaciona svojstva.
+</div>

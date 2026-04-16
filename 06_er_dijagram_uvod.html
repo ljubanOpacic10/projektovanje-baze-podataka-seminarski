@@ -14,6 +14,10 @@ ER dijagram (Entity-Relationship dijagram) je grafički prikaz strukture baze po
 
 Umesto da razmišljamo apstraktno ili da odmah pišemo tabele, možemo prvo nacrtati dijagram koji prikazuje kako je sistem organizovan. Ovakav prikaz omogućava da se sistem brzo razume i analizira.
 
+ER dijagram je osmislio američki informatičar Peter Chen 1976. godine. On je predložio način da se stvarni svet predstavi kroz tri osnovna koncepta: entitete (objekte o kojima čuvamo podatke), atribute (osobine tih objekata) i relacije (veze između objekata). Ova ideja je bila toliko korisna da se ER dijagrami i danas koriste kao standardni alat u projektovanju baza podataka, više od četrdeset godina kasnije.
+
+Važno je razumeti da ER dijagram nije isto što i baza podataka. Dijagram je model, odnosno pojednostavljena slika sistema koju pravimo pre nego što krenemo da kreiramo tabele. Isto kao što je mapa grada pojednostavljen prikaz stvarnog grada, tako je i ER dijagram pojednostavljen prikaz budućeg informacionog sistema. Mapa nam ne pokazuje svaku ciglu u svakoj zgradi, ali nam jasno pokazuje gde su ulice, raskrsnice i važni objekti. Na sličan način, ER dijagram pokazuje šta sistem sadrži i kako su njegovi delovi povezani.
+
 <h2>Kako se crtaju ER dijagrami?</h2>
 ER dijagrami koriste jednostavne oblike za predstavljanje različitih elemenata:
 
@@ -22,6 +26,25 @@ ER dijagrami koriste jednostavne oblike za predstavljanje različitih elemenata:
 - Relacije kao rombovi ili linije koje povezuju entitete
 
 Iako nećemo odmah ulaziti u sve detalje crtanja, važno je da razumeš osnovnu ideju: dijagram je vizuelna mapa baze podataka.
+
+Da bismo ovo učinili konkretnijim, razmislimo o našem školskom sistemu. Na dijagramu bismo nacrtali pravougaonik sa natpisom "Učenik" i oko njega elipse sa natpisima "ime", "prezime", "razred". Zatim bismo nacrtali pravougaonik "Predmet" sa elipsom "naziv". Između ta dva pravougaonika bi postojala linija koja govori da postoji veza, na primer "sluša". Na samoj liniji bismo označili koliko učenika može slušati jedan predmet i koliko predmeta može slušati jedan učenik.
+
+Čak i iz ovog kratkog opisa možeš da nasluti koliko je vizuelni prikaz jasniji od tekstualnog. Kada bi neko video ovaj dijagram, odmah bi shvatio osnovnu strukturu sistema bez ikakvog dodatnog objašnjenja.
+
+<h2>Proces izrade ER dijagrama</h2>
+Izrada ER dijagrama nije samo crtanje, već proces koji se sastoji od nekoliko koraka. Ovde ćemo ih samo ukratko najaviti jer ćemo svaki od njih detaljno obrađivati u narednim lekcijama.
+
+Prvi korak je analiza sistema. To znači da moramo razumeti šta sistem radi i koji podaci su nam potrebni. U slučaju škole, moramo znati ko su korisnici sistema, koje informacije treba da se čuvaju i kako su one povezane.
+
+Drugi korak je identifikovanje entiteta, odnosno prepoznavanje objekata o kojima čuvamo podatke. Na primer, na osnovu opisa školskog sistema, prepoznajemo da su nam potrebni entiteti Učenik, Profesor i Predmet.
+
+Treći korak je definisanje atributa, odnosno osobina svakog entiteta. Za Učenika to mogu biti ime, prezime i razred.
+
+Četvrti korak je utvrđivanje relacija, odnosno prepoznavanje kako su entiteti međusobno povezani. Na primer, učenik sluša predmet, a profesor predaje predmet.
+
+Peti korak je preciziranje detalja relacija, kao što su kardinalnost i opcionalnost. O ovome ćemo detaljno govoriti u kasnijim lekcijama.
+
+Ovaj proces nije uvek linearan. Često se vraćamo na prethodne korake kako bismo ispravili ili dopunili model. To je potpuno normalno i očekivano.
 
 <h2>Prednosti ER dijagrama</h2>
 Jedna od najvećih prednosti ER dijagrama je to što nam pomaže da uočimo probleme pre nego što napravimo bazu. Na primer, možemo primetiti da:
@@ -33,10 +56,22 @@ Jedna od najvećih prednosti ER dijagrama je to što nam pomaže da uočimo prob
 
 Ispravljanje ovih problema na nivou dijagrama je mnogo lakše nego kasnije, kada je baza već napravljena.
 
+Da bismo ovo konkretno razumeli, zamislimo sledeći primer. Recimo da crtamo dijagram za školu i shvatimo da nemamo nikakav način da zabeležimo ko predaje koji predmet. To je problem koji možemo da uočimo na dijagramu za pet minuta. Međutim, da smo odmah napravili bazu bez planiranja, možda bismo tek posle mesec dana rada shvatili da nam ta informacija nedostaje. Tada bismo morali da menjamo strukturu baze, prepravljamo kod koji je već napisan i testiramo sve iznova. Promena na dijagramu košta par minuta. Promena u gotovoj bazi i aplikaciji može da košta dane ili čak nedelje rada.
+
+Osim toga, ER dijagram služi i kao dokumentacija. Kada neko novi dođe na projekat, ne mora da čita hiljade linija koda da bi razumeo strukturu sistema. Dovoljno je da pogleda dijagram i odmah ima jasnu sliku o tome koji podaci postoje i kako su povezani.
+
+Još jedna važna prednost je komunikacija. Dijagram je razumljiv i programerima i ljudima koji ne znaju da programiraju. Direktor škole ne mora da razume SQL da bi na dijagramu video da sistem prati učenike, predmete i ocene. Na taj način dijagram pomaže da se svi uključeni u projekat slože oko toga šta sistem treba da radi.
+
 <h2>Šta se dešava bez planiranja?</h2>
 Razmisli o sledećem: šta bi se desilo kada bismo odmah krenuli da pravimo tabele bez prethodnog planiranja? Vrlo verovatno bismo napravili lošu strukturu koju je kasnije teško promeniti.
 
+Zamislimo konkretan primer. Učenik sedi za računarom i kaže: "Treba mi baza za školu, napraviću jednu veliku tabelu sa svim podacima." U toj tabeli stavlja ime učenika, prezime, razred, ime profesora, naziv predmeta i ocenu, sve u jednom redu. Na prvi pogled to izgleda jednostavno.
+
+Međutim, ubrzo se javljaju problemi. Učenik Marko ima pet predmeta, pa se njegovo ime pojavljuje u pet redova. Profesor Jovanović predaje tri predmeta, pa se i njegovo ime ponavlja. Kada profesor promeni prezime, ta promena mora da se unese na pet ili deset mesta. Kada se doda novi predmet koji još nema učenike, ne znamo gde da ga smestimo. Ovi problemi nastaju upravo zato što nije postojao plan, odnosno nije napravljen dijagram pre nego što se krenulo sa implementacijom.
+
 ER dijagram nam omogućava da prvo isplaniramo bazu, a tek onda da pređemo na tehničku realizaciju. Dobar dijagram štedi vreme jer sprečava greške i olakšava razumevanje sistema, kako tebi tako i drugim ljudima koji rade na projektu.
+
+U profesionalnom svetu ovaj princip je poznat kao "planiranje pre implementacije" i važi za gotovo svaku oblast inženjeringa. Niko ne počinje da gradi most bez prethodnog proračuna i plana. Na isti način, ne treba počinjati sa pravljenjem baze bez prethodnog modelovanja.
 
 <h2>Dijagram kao skica</h2>
 Ako ti je teško da zamisliš ER dijagram, pokušaj da ga posmatraš kao skicu ili plan. Kao što arhitekta prvo pravi plan kuće pre nego što počne gradnju, tako i mi pravimo dijagram pre nego što napravimo bazu podataka.
@@ -52,9 +87,10 @@ U narednim lekcijama ćemo detaljnije učiti kako se crtaju ER dijagrami, koje v
 Zamisli da treba da objasniš drugome kako funkcioniše informacioni sistem za školu koji smo analizirali. Odgovori na sledeća pitanja:
 
 1. Koje bi elemente uključio u jedan dijagram?
-2. Navedi najmanje tri entiteta
-3. Opiši kako su oni međusobno povezani
+2. Navedi najmanje tri entiteta i za svaki napiši bar dva atributa
+3. Opiši kako su ti entiteti međusobno povezani i šta te veze predstavljaju
 4. Pokušaj da zamisliš kako bi taj dijagram izgledao, čak i ako ga ne crtaš
+5. Navedi jedan primer problema koji bi mogao da nastane ako ne napraviš dijagram pre nego što kreneš da praviš tabele
 
-Napiši detaljno šta bi trebalo da bude na tvom dijagramu.
+Napiši detaljno šta bi trebalo da bude na tvom dijagramu i zašto si izabrao baš te elemente.
 </div>

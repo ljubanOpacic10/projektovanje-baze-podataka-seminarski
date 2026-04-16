@@ -1,0 +1,256 @@
+<h1>Definisanje modela – od klase do tabele</h1>
+
+U prethodnoj lekciji upoznali smo Entity Framework Core i naučili šta su DbContext i DbSet. Sada je vreme da detaljnije pogledamo kako se definišu model klase, odnosno kako od klase u C# nastaje tabela u bazi podataka.
+
+<h2>Klasa kao opis tabele</h2>
+
+U Code-First pristupu, svaka klasa predstavlja jednu tabelu. Svojstva klase postaju kolone u tabeli. Ovo smo već videli na jednostavnom primeru, ali sada ćemo dodati detalje koji su važni za pravilan rad sa bazom.
+
+Počnimo od klase Ucenik:
+
+<xmp class="primer_ta">
+public class Ucenik
+{
+    public int Id { get; set; }
+    public string Ime { get; set; }
+    public string Prezime { get; set; }
+    public string Razred { get; set; }
+}
+</xmp>
+
+EF Core prepoznaje ovu klasu i na osnovu nje kreira tabelu. Svako svojstvo postaje kolona:
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>Svojstvo u klasi</th>
+			<th>Kolona u tabeli</th>
+			<th>Tip podatka</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Id</td>
+			<td>Id</td>
+			<td>INT</td>
+		</tr>
+		<tr>
+			<td>Ime</td>
+			<td>Ime</td>
+			<td>NVARCHAR</td>
+		</tr>
+		<tr>
+			<td>Prezime</td>
+			<td>Prezime</td>
+			<td>NVARCHAR</td>
+		</tr>
+		<tr>
+			<td>Razred</td>
+			<td>Razred</td>
+			<td>NVARCHAR</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Primarni ključ u EF Core-u</h2>
+
+Setimo se: svaka tabela mora da ima primarni ključ. U SQL-u smo to označavali sa PRIMARY KEY. Kako EF Core zna koje svojstvo je primarni ključ?
+
+EF Core primenjuje konvenciju: ako klasa ima svojstvo koje se zove Id ili [ImeKlase]Id, ono automatski postaje primarni ključ. Na primer:
+
+<xmp class="primer_ta">
+// EF Core prepoznaje "Id" kao primarni ključ
+public int Id { get; set; }
+
+// Isto važi i za "UcenikId"
+public int UcenikId { get; set; }
+</xmp>
+
+Pored toga, EF Core automatski podešava da se vrednost primarnog ključa generiše sama, slično kao IDENTITY u SQL Server-u. To znači da ne moramo ručno da zadajemo Id kada dodajemo novog učenika, baza sama dodeljuje sledeći broj.
+
+Uporedi sa SQL-om koji smo ranije pisali:
+
+<xmp class="primer_ta">
+-- u SQL-u smo ručno davali Id
+INSERT INTO Ucenik (id_ucenik, ime, prezime, razred)
+VALUES (1, 'Marko', 'Markovic', 'I1');
+</xmp>
+
+U EF Core-u to nije potrebno:
+
+<xmp class="primer_ta">
+// Id se automatski generiše
+var ucenik = new Ucenik
+{
+    Ime = "Marko",
+    Prezime = "Markovic",
+    Razred = "I1"
+};
+</xmp>
+
+<h2>Veze između klasa – navigaciona svojstva</h2>
+
+U ranijim lekcijama učili smo o relacijama između entiteta. Na primer, učenik ima više ocena, a svaka ocena pripada jednom učeniku. U SQL-u smo to rešavali pomoću stranog ključa. Kako to izgleda u EF Core-u?
+
+Pogledajmo klasu Ocena:
+
+<xmp class="primer_ta">
+public class Ocena
+{
+    public int Id { get; set; }
+    public int Vrednost { get; set; }
+    public DateTime Datum { get; set; }
+
+    // strani ključ
+    public int UcenikId { get; set; }
+    public int PredmetId { get; set; }
+
+    // navigaciono svojstvo
+    public Ucenik Ucenik { get; set; }
+    public Predmet Predmet { get; set; }
+}
+</xmp>
+
+Svojstvo UcenikId je strani ključ. Ono čuva Id učenika kome ocena pripada, isto kao što smo u SQL-u imali kolonu id_ucenik u tabeli Ocena.
+
+Svojstvo Ucenik (tipa Ucenik) je navigaciono svojstvo. Ono omogućava da iz objekta Ocena direktno pristupimo objektu Ucenik kome ta ocena pripada.
+
+<h2>Navigaciona svojstva sa druge strane</h2>
+
+Klasa Ucenik može da ima listu svojih ocena:
+
+<xmp class="primer_ta">
+public class Ucenik
+{
+    public int Id { get; set; }
+    public string Ime { get; set; }
+    public string Prezime { get; set; }
+    public string Razred { get; set; }
+
+    // jedan učenik ima više ocena
+    public List<Ocena> Ocene { get; set; }
+}
+</xmp>
+
+Svojstvo Ocene tipa List govori EF Core-u da jedan učenik može imati više ocena. To je relacija 1:N koju smo crtali u ER dijagramu.
+
+EF Core na osnovu ovih klasa automatski kreira tabele sa odgovarajućim stranim ključem:
+
+<xmp class="primer_ta">
+-- EF Core generiše nešto poput ovoga:
+CREATE TABLE Ucenici (
+    Id INT PRIMARY KEY IDENTITY,
+    Ime NVARCHAR(MAX),
+    Prezime NVARCHAR(MAX),
+    Razred NVARCHAR(MAX)
+);
+
+CREATE TABLE Ocene (
+    Id INT PRIMARY KEY IDENTITY,
+    Vrednost INT,
+    Datum DATETIME2,
+    UcenikId INT FOREIGN KEY REFERENCES Ucenici(Id)
+);
+</xmp>
+
+Primeti kako je to veoma slično onome što smo mi ručno pisali u SQL-u. Razlika je samo u tome što sada ne moramo to da radimo sami.
+
+<h2>Kompletan model školskog sistema</h2>
+
+Hajde da pogledamo kako bi izgledao kompletan model za naš školski sistem sa četiri klase:
+
+<xmp class="primer_ta">
+public class Ucenik
+{
+    public int Id { get; set; }
+    public string Ime { get; set; }
+    public string Prezime { get; set; }
+    public string Razred { get; set; }
+    public List<Ocena> Ocene { get; set; }
+}
+
+public class Profesor
+{
+    public int Id { get; set; }
+    public string Ime { get; set; }
+    public string Prezime { get; set; }
+    public List<Predmet> Predmeti { get; set; }
+}
+
+public class Predmet
+{
+    public int Id { get; set; }
+    public string Naziv { get; set; }
+    public int ProfesorId { get; set; }
+    public Profesor Profesor { get; set; }
+    public List<Ocena> Ocene { get; set; }
+}
+
+public class Ocena
+{
+    public int Id { get; set; }
+    public int Vrednost { get; set; }
+    public DateTime Datum { get; set; }
+    public int UcenikId { get; set; }
+    public Ucenik Ucenik { get; set; }
+    public int PredmetId { get; set; }
+    public Predmet Predmet { get; set; }
+}
+</xmp>
+
+Pogledaj kako se ovde jasno vide sve relacije. Profesor predaje više predmeta. Predmet pripada jednom profesoru. Učenik ima više ocena. Svaka ocena je vezana za jednog učenika i jedan predmet. To su iste relacije koje smo definisali u ER dijagramu, samo izražene kroz kod.
+
+<div class="napomena">
+Česta greška kod učenika je da zaborave da dodaju navigaciono svojstvo ili strani ključ. Ako napišeš samo UcenikId bez svojstva Ucenik, EF Core će i dalje napraviti vezu, ali nećeš moći da u kodu jednostavno pristupiš učeniku iz objekta ocene. Najbolja praksa je da uvek imaš oba: strani ključ (int UcenikId) i navigaciono svojstvo (Ucenik Ucenik).
+</div>
+
+<h2>Poređenje sa ER dijagramom</h2>
+
+Ako se setiš lekcije o crtanju ER dijagrama, tamo smo definisali tipove entiteta, njihove atribute i poveznike. Sada to isto radimo, ali umesto dijagrama koristimo C# klase.
+
+<table class="tabela">
+	<thead>
+		<tr>
+			<th>ER dijagram</th>
+			<th>Code-First model</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Tip entiteta</td>
+			<td>Klasa</td>
+		</tr>
+		<tr>
+			<td>Atribut</td>
+			<td>Svojstvo klase</td>
+		</tr>
+		<tr>
+			<td>Primarni ključ</td>
+			<td>Svojstvo Id</td>
+		</tr>
+		<tr>
+			<td>Strani ključ</td>
+			<td>Svojstvo [ImeKlase]Id</td>
+		</tr>
+		<tr>
+			<td>Relacija 1:N</td>
+			<td>Lista sa jedne strane, strani ključ sa druge</td>
+		</tr>
+	</tbody>
+</table>
+
+Razmisli: da li bi mogao da na osnovu ER dijagrama koji si nacrtao za završni projekat napišeš odgovarajuće klase? Ako razumeš taj dijagram, definisanje modela je samo pitanje prevoda iz jednog zapisa u drugi.
+
+<h2>Šta sledi dalje</h2>
+
+U narednoj lekciji ćemo videti kako se od ovih klasa zaista kreira baza podataka. Upoznaćemo pojam migracije i naučiti kako da pokrenemo proces koji od našeg koda pravi tabele u bazi.
+
+<div class="zadatak">
+Napiši klasu Profesor u C# sa svojstvima Id, Ime, Prezime i listom predmeta koje predaje.
+
+Napiši klasu Predmet koja ima strani ključ ka Profesoru i odgovarajuće navigaciono svojstvo.
+
+Objasni šta je navigaciono svojstvo i zašto je korisno.
+
+Uporedi kako se relacija 1:N izražava u SQL-u (strani ključ) i u Code-First pristupu (navigaciona svojstva i strani ključ). Koje su sličnosti, a koje razlike?
+</div>
