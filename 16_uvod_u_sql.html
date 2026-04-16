@@ -2,7 +2,7 @@
 
 U prethodnoj lekciji govorili smo o tome kada treba, a kada ne treba primeniti normalizaciju. Videli smo da način na koji osmislimo bazu direktno utiče na to kako ćemo kasnije raditi sa podacima. Sada prelazimo na sledeći važan korak: kako da sa bazom zaista komuniciramo.
 
-<h2>Zasto nam je potreban SQL</h2>
+<h2>Zašto nam je potreban SQL</h2>
 
 Zamisli da škola već ima bazu sa tabelama Ucenik, Nastavnik i Predmet. Kako bismo uneli novog učenika? Kako bismo pronašli sve učenike iz odeljenja I1? Kako bismo izmenili podatak ako učenik pređe u drugo odeljenje?
 
@@ -26,7 +26,7 @@ Kada govorimo o SQL-u, korisno je da razlikujemo nekoliko grupa komandi.
 	<thead>
 		<tr>
 			<th>Grupa</th>
-			<th>Cemu sluzi</th>
+			<th>Čemu služi</th>
 			<th>Primeri</th>
 		</tr>
 	</thead>
@@ -55,7 +55,7 @@ U ovoj lekciji fokusiraćemo se na prve korake i na osnovne komande koje ćeš n
 
 Kada pokreneš SQL Server Management Studio, prvi korak je povezivanje sa serverom. Otvara se prozor u kome biraš server i način prijavljivanja. Kada se uspešno povežeš, na ekranu vidiš prikaz servera i postojećih baza podataka.
 
-U narednoj lekciji ćemo detaljnije raditi sa bazom pa ćemo dataljnije proći i kroz potrebne korake za postavljanje SQL Server-a, ali sada ćemo proći kroz osnovne korake kako da kreiramo bazu, tabele i unesemo podatke koristeći SQL komande.
+U narednoj lekciji ćemo detaljnije raditi sa bazom pa ćemo detaljnije proći i kroz potrebne korake za postavljanje SQL Server-a, ali sada ćemo proći kroz osnovne korake kako da kreiramo bazu, tabele i unesemo podatke koristeći SQL komande.
 <h2>Kreiranje baze podataka</h2>
 
 Sledeći korak je kreiranje nove baze podataka. To možemo uraditi preko menija u alatu ili pomoću SQL komande. U ovom kursu fokus je na SQL pristupu, jer tako jasnije razumemo šta se zaista dešava.
@@ -138,27 +138,27 @@ WHERE id_ucenik = 1;
 Ovom komandom brišemo red koji pripada učeniku sa identifikatorom 1.
 
 <div class="napomena">
-Ucenici često pokušavaju da nauce SQL komande napamet, bez razumevanja. To nije dobar pristup. Vaznije je da razumes sta komanda radi i nad kojim podacima deluje. Posebno obrati paznju na WHERE uslov kod komandi UPDATE i DELETE, jer ako ga izostavis ili pogresno napises, promena moze obuhvatiti veliki broj redova.
+Učenici često pokušavaju da nauče SQL komande napamet, bez razumevanja. To nije dobar pristup. Važnije je da razumeš šta komanda radi i nad kojim podacima deluje. Posebno obrati pažnju na WHERE uslov kod komandi UPDATE i DELETE, jer ako ga izostaviš ili pogrešno napišeš, promena može obuhvatiti veliki broj redova.
 </div>
 
-<h2>Kako da lakse razumes SQL</h2>
+<h2>Kako da lakše razumeš SQL</h2>
 
 Ako ti je početak težak, poveži svaki deo SQL-a sa onim što već znaš. Tabela odgovara tipu entiteta, red predstavlja jednu pojavu tog entiteta, a kolone predstavljaju atribute. Kada to imaš u glavi, SQL više ne izgleda kao skup nepovezanih komandi, već kao logičan način rada sa modelom koji smo već napravili.
 
-Razmisli i o sledećem: šta bi se desilo ako bismo imali tabelu Predmet, ali ne bismo imali primarni ključ? Kako bismo razlikovali dva predmeta istog naziva? Takva pitanja pomažu da bolje razumeš zašto struktura baze i SQL moraju da rade zajedno.
+Razmisli i o sledećem: šta bi se desilo ako bismo imali tabelu Učenik, ali ne bismo imali primarni ključ? Kako bismo razlikovali dva učenika istog imena i prezimena? Takva pitanja pomažu da bolje razumeš zašto struktura baze i SQL moraju da rade zajedno.
 
-<h2>Sta sledi dalje</h2>
+<h2>Šta sledi dalje</h2>
 
 U narednoj lekciji ćemo detaljnije raditi sa SQL upitima i naučiti kako da preciznije pretražujemo podatke iz tabela.
 
 <div class="zadatak">
-Napisi SQL komandu za kreiranje baze podataka pod nazivom Skola.
+Napiši SQL komandu za kreiranje baze podataka pod nazivom Skola.
 
-Napisi SQL komandu za kreiranje tabele Predmet sa kolonama id_predmet i naziv.
+Napiši SQL komandu za kreiranje tabele Predmet sa kolonama id_predmet i naziv.
 
-Napisi SQL komandu za unos jednog reda u tabelu Predmet.
+Napiši SQL komandu za unos jednog reda u tabelu Predmet.
 
-Napisi SQL komandu koja prikazuje sve podatke iz tabele Predmet.
+Napiši SQL komandu koja prikazuje sve podatke iz tabele Predmet.
 
-Pokusaj da samostalno napises komande i razumes sta svaka od njih radi.
+Pokušaj da samostalno napišeš komande i razumeš šta svaka od njih radi.
 </div>

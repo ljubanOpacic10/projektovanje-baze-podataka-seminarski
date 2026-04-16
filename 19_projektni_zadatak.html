@@ -1,123 +1,121 @@
-<h1>Zavrsni projekat i dalji koraci u ucenju</h1>
+<h1>Završni projekat i dalji koraci u učenju</h1>
 
-U prethodnim lekcijama prosli smo kroz ceo proces projektovanja relacione baze podataka. Poceli smo od razumevanja problema iz realnog sveta, zatim smo definisali tipove entiteta, atribute i relacije, crtali ER dijagram, analizirali kardinalnost i opcionalnost, preveli model u tabele, bavili se funkcionalnim zavisnostima i normalizacijom, a na kraju implementirali bazu i radili sa podacima pomocu SQL-a.
+U prethodnim lekcijama prošli smo kroz ceo proces projektovanja relacione baze podataka. Počeli smo od razumevanja problema iz realnog sveta, zatim smo definisali tipove entiteta, atribute i relacije, crtali ER dijagram, analizirali kardinalnost i opcionalnost, preveli model u tabele, bavili se funkcionalnim zavisnostima i normalizacijom, a na kraju implementirali bazu i radili sa podacima pomoću SQL-a.
 
-U ovoj zavrsnoj lekciji cilj je da sve to primenis kroz jedan samostalan projekat. Kroz ovaj zadatak procices sve korake koje smo ucili i steci jasnu sliku kako izgleda kompletan proces projektovanja baze podataka.
+U ovoj završnoj lekciji cilj je da sve to primeniš kroz jedan samostalan projekat. Kroz ovaj zadatak proći ćeš sve korake koje smo učili i steći jasnu sliku kako izgleda kompletan proces projektovanja baze podataka.
 
 <h2>Opis sistema za projekat</h2>
 
-Zamisli sledeci realan sistem.
+Zamisli sledeći realan sistem.
 
-U pitanju je sistem za upravljanje sportskim centrom. U tom centru postoje razlicite aktivnosti koje korisnici mogu pohadjati, kao sto su teretana, grupni treninzi ili sportske sekcije. Svaki korisnik moze da se prijavi na jednu ili vise aktivnosti. Svaka aktivnost ima svog trenera koji je zaduzen za njen rad. Trener moze voditi vise aktivnosti.
+U pitanju je sistem za upravljanje sportskim centrom. U tom centru postoje različite aktivnosti koje korisnici mogu pohađati, kao što su teretana, grupni treninzi ili sportske sekcije. Svaki korisnik može da se prijavi na jednu ili više aktivnosti. Svaka aktivnost ima svog trenera koji je zadužen za njen rad. Trener može voditi više aktivnosti.
 
-Korisnici imaju svoje profile sa osnovnim podacima. Kada se korisnik prijavi na neku aktivnost, evidentira se njegova prijava. Takodje, moze se pratiti kada je korisnik prisustvovao treningu i eventualno dodatne informacije vezane za tu aktivnost.
+Korisnici imaju svoje profile sa osnovnim podacima. Kada se korisnik prijavi na neku aktivnost, evidentira se njegova prijava. Takođe, može se pratiti kada je korisnik prisustvovao treningu i eventualno dodatne informacije vezane za tu aktivnost.
 
-Ovaj opis predstavlja realan sistem, ali nije formalno modelovan. Tvoj zadatak je da na osnovu ovog opisa prepoznas koje su kljucne celine sistema, koje podatke treba cuvati i kako su ti delovi medjusobno povezani.
+Ovaj opis predstavlja realan sistem, ali nije formalno modelovan. Tvoj zadatak je da na osnovu ovog opisa prepoznaš koje su ključne celine sistema, koje podatke treba čuvati i kako su ti delovi međusobno povezani.
 
-<h2>Kako da zapocnes analizu</h2>
+<h2>Kako da započneš analizu</h2>
 
-Vazno je da obratis paznju na sledece: koji objekti postoje u sistemu, koje informacije o njima treba cuvati i kako su medjusobno povezani kroz aktivnosti koje se desavaju u sistemu. Nemoj odmah razmisljati o tabelama, vec prvo analiziraj sistem na nacin na koji smo to radili kroz kurs.
+Važno je da obratiš pažnju na sledeće: koji objekti postoje u sistemu, koje informacije o njima treba čuvati i kako su međusobno povezani kroz aktivnosti koje se dešavaju u sistemu. Nemoj odmah razmišljati o tabelama, već prvo analiziraj sistem na način na koji smo to radili kroz kurs.
 
-Sta bi se desilo ako odmah krenes sa pisanjem SQL komandi, bez analize? Vrlo verovatno bi kasnije morao da menjas veliki deo modela. Zato je redosled rada veoma vazan.
+Šta bi se desilo ako odmah kreneš sa pisanjem SQL komandi, bez analize? Vrlo verovatno bi kasnije morao da menjaš veliki deo modela. Zato je redosled rada veoma važan.
 
-<h2>Koraci koje treba da pratis</h2>
+<h2>Koraci koje treba da pratiš</h2>
 
-Nakon analize sistema, prati sledece korake.
+Nakon analize sistema, prati sledeće korake.
 
-Prvi korak je identifikacija tipova entiteta i njihovih atributa. Na osnovu opisa sistema izdvoji osnovne celine i za svaku od njih definisi koje podatke treba cuvati.
+Prvi korak je identifikacija tipova entiteta i njihovih atributa. Na osnovu opisa sistema izdvoji osnovne celine i za svaku od njih definiši koje podatke treba čuvati.
 
-Drugi korak je definisanje relacija izmedju tipova entiteta. Razmisli kako su te celine povezane i odredi tip relacije, kao i kardinalnost i opcionalnost.
+Drugi korak je definisanje relacija između tipova entiteta. Razmisli kako su te celine povezane i odredi tip relacije, kao i kardinalnost i opcionalnost.
 
-Treci korak je crtanje ER dijagrama. Predstavi sve tipove entiteta, njihove atribute i poveznike izmedju njih. Obrati paznju na jasnocu i tacnost dijagrama.
+Treći korak je crtanje ER dijagrama. Predstavi sve tipove entiteta, njihove atribute i poveznike između njih. Obrati pažnju na jasnoću i tačnost dijagrama.
 
-Cetvrti korak je prevodjenje ER dijagrama u relacioni model. Definisi tabele, kolone, primarne kljuceve i strane kljuceve.
+Četvrti korak je prevođenje ER dijagrama u relacioni model. Definiši tabele, kolone, primarne ključeve i strane ključeve.
 
-Peti korak je provera funkcionalnih zavisnosti i normalizacija. Analiziraj da li postoje delimicne ili tranzitivne zavisnosti i ispravi strukturu tabele ako je potrebno.
+Peti korak je provera funkcionalnih zavisnosti i normalizacija. Analiziraj da li postoje delimične ili tranzitivne zavisnosti i ispravi strukturu tabele ako je potrebno.
 
-Sesti korak je implementacija baze pomocu SQL-a. U SQL Server Management Studio kreiraj bazu i sve tabele koje si definisao.
+Šesti korak je implementacija baze pomoću SQL-a. U SQL Server Management Studio kreiraj bazu i sve tabele koje si definisao.
 
-Sedmi korak je unos podataka i pisanje upita. Unesi nekoliko primera podataka i napisi SQL upite koji prikazuju smislen rezultat, na primer prikaz svih korisnika i aktivnosti koje pohadjaju.
+Sedmi korak je unos podataka i pisanje upita. Unesi nekoliko primera podataka i napiši SQL upite koji prikazuju smislen rezultat, na primer prikaz svih korisnika i aktivnosti koje pohađaju.
 
 <h2>Primer organizacije projekta</h2>
 
-Da bi ti bilo lakse da strukturiras rad, mozes napraviti jednostavan plan rada.
+Da bi ti bilo lakše da strukturiraš rad, možeš napraviti jednostavan plan rada.
 
 <table class="tabela">
 	<thead>
 		<tr>
 			<th>Faza</th>
-			<th>Sta radis</th>
+			<th>Šta radiš</th>
 			<th>Rezultat</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
 			<td>Analiza</td>
-			<td>Izdvajas entitete, atribute i procese</td>
-			<td>Spisak kljucnih celina sistema</td>
+			<td>Izdvajaš entitete, atribute i procese</td>
+			<td>Spisak ključnih celina sistema</td>
 		</tr>
 		<tr>
 			<td>Modelovanje</td>
-			<td>Crtas ER dijagram i definises relacije</td>
+			<td>Crtaš ER dijagram i definišeš relacije</td>
 			<td>Jasan model sistema</td>
 		</tr>
 		<tr>
 			<td>Implementacija</td>
-			<td>Kreiras bazu i tabele u SQL Server-u</td>
+			<td>Kreiraš bazu i tabele u SQL Server-u</td>
 			<td>Funkcionalna struktura baze</td>
 		</tr>
 		<tr>
 			<td>Testiranje</td>
-			<td>Unosis podatke i pises upite</td>
+			<td>Unosiš podatke i pišeš upite</td>
 			<td>Provera da model radi u praksi</td>
 		</tr>
 	</tbody>
 </table>
 
-U ovom projektu nije cilj samo da dobijes tacan rezultat, vec da razumes svaki korak procesa. Ako negde napravis gresku, pokusaj da je pronadjes i ispravis, jer je to deo ucenja.
+U ovom projektu nije cilj samo da dobiješ tačan rezultat, već da razumeš svaki korak procesa. Ako negde napraviš grešku, pokušaj da je pronađeš i ispraviš, jer je to deo učenja.
 
 <div class="napomena">
-Ucenici cesto prave gresku tako sto preskoce fazu analize i odmah krenu sa pisanjem SQL koda. Time gube jasnu strukturu i dolaze do problema kasnije. Najbolji pristup je da pratis redosled koraka koje smo ucili: analiza, modelovanje, prevod u tabele, normalizacija, pa tek onda implementacija i upiti.
+Učenici često prave grešku tako što preskoče fazu analize i odmah krenu sa pisanjem SQL koda. Time gube jasnu strukturu i dolaze do problema kasnije. Najbolji pristup je da pratiš redosled koraka koje smo učili: analiza, modelovanje, prevod u tabele, normalizacija, pa tek onda implementacija i upiti.
 </div>
 
-<h2>Dalji koraci u ucenju</h2>
+<h2>Dalji koraci u učenju</h2>
 
-Kroz ovaj kurs obradili smo osnovne koncepte relacionih baza podataka, ali ovo je tek pocetak. Baze podataka su siroka oblast i postoji mnogo tema koje nismo detaljno obradili, kao sto su optimizacija upita, indeksi, transakcije, bezbednost i rad sa velikim sistemima.
+Kroz ovaj kurs obradili smo osnovne koncepte relacionih baza podataka, ali ovo je tek početak. Baze podataka su široka oblast i postoji mnogo tema koje nismo detaljno obradili, kao što su optimizacija upita, indeksi, transakcije, bezbednost i rad sa velikim sistemima.
 
-Ako zelis da produbis znanje, sledeci koraci mogu biti:
+Ako želiš da produbiš znanje, sledeći koraci mogu biti:
 
-Ucenje naprednijih SQL upita, kao sto su agregatne funkcije, grupisanje podataka i slozeniji JOIN izrazi.
+Učenje naprednijih SQL upita, kao što su agregatne funkcije, grupisanje podataka i složeniji JOIN izrazi.
 
-Rad na backend projektima, gde baza podataka postaje deo veceg sistema. U takvim projektima koristices programske jezike kao sto su C#, Java ili JavaScript za komunikaciju sa bazom.
+Rad na backend projektima, gde baza podataka postaje deo većeg sistema. U takvim projektima koristićeš programske jezike kao što su C#, Java ili JavaScript za komunikaciju sa bazom.
 
-Upoznavanje sa ORM alatima koji omogucavaju rad sa bazom kroz programski kod umesto direktnog pisanja SQL-a.
+Upoznavanje sa ORM alatima koji omogućavaju rad sa bazom kroz programski kod umesto direktnog pisanja SQL-a.
 
-Razumevanje kako se baze koriste u web aplikacijama i kako se povezuju sa korisnickim interfejsom.
+Razumevanje kako se baze koriste u web aplikacijama i kako se povezuju sa korisničkim interfejsom.
 
-Za vezbanje SQL-a mozes koristiti online platforme koje nude interaktivne zadatke. Jedan od primera je SQL Island, gde kroz resavanje problema ucis kako da pises upite. Takodje postoje i drugi sajtovi sa zadacima i vezbama koji ti mogu pomoci da steknes rutinu.
+Za vežbanje SQL-a možeš koristiti online platforme koje nude interaktivne zadatke. Jedan od primera je SQL Island, gde kroz rešavanje problema učiš kako da pišeš upite. Takođe postoje i drugi sajtovi sa zadacima i vežbama koji ti mogu pomoći da stekneš rutinu.
 
-Pored toga, korisno je koristiti SQL cheat sheet dokumente koji sadrze pregled najvaznijih komandi i sintakse. Takvi materijali mogu ti pomoci dok ucis i radis zadatke.
+Pored toga, korisno je koristiti SQL cheat sheet dokumente koji sadrže pregled najvažnijih komandi i sintakse. Takvi materijali mogu ti pomoći dok učiš i radiš zadatke.
 
-Razmisli o sledecem: kako bi izgledao kompletan informacioni sistem koji koristi bazu podataka koju si napravio? Kako bi korisnici komunicirali sa tim sistemom? Ova pitanja te uvode u naredni nivo razvoja softvera.
+Razmisli o sledećem: kako bi izgledao kompletan informacioni sistem koji koristi bazu podataka koju si napravio? Kako bi korisnici komunicirali sa tim sistemom? Ova pitanja te uvode u naredni nivo razvoja softvera.
 
-Ovaj kurs ti je dao osnovu za razumevanje kako se podaci organizuju i kako se sa njima radi. Dalji napredak zavisi od vezbe i rada na konkretnim projektima.
+<h2>Šta sledi dalje</h2>
 
-<h2>Sta sledi dalje</h2>
-
-U narednoj lekciji cemo uraditi rekapitulaciju kursa kroz pregled najvaznijih koraka, tipicnih gresaka i preporuka za samostalni rad na novim projektima.
+U narednoj lekciji ćemo videti na koji način još možemo kreirati bazu i tabele koristeći ORM alate.
 
 <div class="zadatak">
 Na osnovu opisa sistema sportskog centra identifikuj tipove entiteta i njihove atribute.
 
-Definisi relacije izmedju tipova entiteta i njihovu kardinalnost i opcionalnost.
+Definiši relacije između tipova entiteta i njihovu kardinalnost i opcionalnost.
 
 Nacrtaj ER dijagram.
 
-Prevedi model u tabele i definisi kljuceve.
+Prevedi model u tabele i definiši ključeve.
 
 Implementiraj bazu u SQL Server-u.
 
-Unesi primer podataka i napisi najmanje dva SQL upita.
+Unesi primer podataka i napiši najmanje dva SQL upita.
 
-Pokusaj da kroz ovaj zadatak primenis sve sto si naucio tokom kursa.
+Pokušaj da kroz ovaj zadatak primeniš sve što si naučio tokom kursa.
 </div>

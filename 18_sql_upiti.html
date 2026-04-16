@@ -4,7 +4,7 @@ U prethodnoj lekciji kreirali smo bazu podataka i tabele za informacioni sistem 
 
 U ovoj lekciji naučićemo kako da unesemo podatke u tabele i kako da ih pretražujemo pomoću SQL upita. Tek kada u bazi postoje stvarni podaci, možemo zaista da proverimo da li naš sistem radi onako kako smo planirali.
 
-<h2>Zasto su podaci vazni</h2>
+<h2>Zašto su podaci važni</h2>
 
 Zamisli da imamo napravljene tabele Ucenik, Profesor, Predmet i Ocena, ali da su sve prazne. Da li bismo tada mogli da saznamo koji učenik ima koju ocenu? Ne bismo, jer baza bez podataka ima strukturu, ali nema sadržaj.
 
@@ -100,7 +100,7 @@ SELECT ime, prezime FROM Ucenik;
 
 Ova komanda vraća samo imena i prezimena učenika.
 
-<h2>Filtriranje podataka pomocu WHERE</h2>
+<h2>Filtriranje podataka pomoću WHERE</h2>
 
 Ponekad ne želimo da vidimo sve podatke, već samo deo njih. Tada koristimo WHERE.
 
@@ -113,7 +113,7 @@ Ova komanda vraća samo učenike iz razreda I1.
 
 Razmisli o tome kako bi izgledao upit kojim bismo pronašli samo učenike iz razreda II2. Vidimo da SQL upit zapravo liči na pitanje koje postavljamo bazi.
 
-<h2>Povezivanje tabela pomocu JOIN</h2>
+<h2>Povezivanje tabela pomoću JOIN</h2>
 
 Još jedna veoma važna stvar je povezivanje tabela. Pošto su naše tabele povezane pomoću stranih ključeva, možemo koristiti JOIN da spojimo podatke iz više tabela.
 
@@ -140,25 +140,25 @@ Na ovaj način dobijamo kompletnu informaciju: koji učenik, iz kog predmeta, ko
 
 <img src="images/prikaz-select-naredbe-sa-join.png" alt="" class="img-fluid velicina">
 
-<h2>Kako da razumes SQL upite</h2>
+<h2>Kako da razumeš SQL upite</h2>
 
 Ako ti je teško da razumeš SELECT i JOIN, pokušaj da ih povežeš sa pitanjima iz realnog života. Na primer: Koji učenici imaju ocene? Koju ocenu ima učenik iz određenog predmeta? SQL upiti su zapravo način da takva pitanja postavimo bazi podataka.
 
 Kada to shvatiš, upiti više ne deluju kao komplikovane komande, već kao jasan način da dođeš do informacije koja ti je potrebna.
 
 <div class="napomena">
-Ucenici cesto prave nekoliko gresaka. Jedna od najcescih je da pokusaju da unesu podatke u tabelu koja zavisi od druge tabele pre nego sto unesu osnovne podatke. Na primer, pokusavaju da unesu ocenu pre nego sto postoji ucenik ili predmet. Druga cesta greska je netacno napisan JOIN uslov, zbog cega rezultat ne odgovara pitanju koje smo postavili. Zato je vazno da uvek proveris da li strani kljucevi odgovaraju postojecim podacima i da li je uslov povezivanja ispravno napisan.
+Učenici često prave nekoliko grešaka. Jedna od najčešćih je da pokušaju da unesu podatke u tabelu koja zavisi od druge tabele pre nego što unesu osnovne podatke. Na primer, pokušavaju da unesu ocenu pre nego što postoji učenik ili predmet. Druga česta greška je netačno napisan JOIN uslov, zbog čega rezultat ne odgovara pitanju koje smo postavili. Zato je važno da uvek proveriš da li strani ključevi odgovaraju postojećim podacima i da li je uslov povezivanja ispravno napisan.
 </div>
 
-<h2>Zasto je ovo vazan korak</h2>
+<h2>Zašto je ovo važan korak</h2>
 
 Razumevanje unosa i pretrage podataka je ključni korak jer sada baza postaje funkcionalna. Više ne radimo samo sa strukturom, već i sa stvarnim podacima. To znači da naš model škole sada možemo da koristimo za konkretna pitanja i konkretne odgovore.
 
 Šta bi se desilo ako bismo imali puno podataka, a ne bismo znali da napišemo dobar SELECT upit? Podaci bi postojali, ali ne bismo umeli da dođemo do informacije koja nam je potrebna. Zato su INSERT i SELECT osnova praktičnog rada sa bazom.
 
-<h2>Sta sledi dalje</h2>
+<h2>Šta sledi dalje</h2>
 
-U narednoj završnoj lekciji ćemo definisati zadatak koji možeš uraditi kao što smo mi kroz ove lekcije prolazili kroz primere za inforamcioni sistem za školu. To će biti prilika da samostalno primeniš sve što si naučio i da proveriš svoje znanje.
+U narednoj lekciji ćemo definisati zadatak koji možeš uraditi kao što smo mi kroz ove lekcije prolazili kroz primere za informacioni sistem za školu. To će biti prilika da samostalno primeniš sve što si naučio i da proveriš svoje znanje.
 
 <div class="zadatak">
 Unesi najmanje tri učenika u tabelu Ucenik.
