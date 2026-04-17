@@ -36,7 +36,7 @@ Sa druge strane, ako je minimalan broj veza jedan, veza je obavezna. To znači d
 
 Na primer, možemo pretpostaviti da svaka pojava tipa entiteta Ocena mora biti povezana sa tačno jednom pojavom tipa entiteta Učenik. Ocena ne može postojati sama za sebe, već uvek mora pripadati nekom učeniku.
 
-Opcionalnost ima direktne posledice na implementaciju baze. Ako je veza obavezna, to znači da prilikom unosa podataka moramo obezbediti da ta veza postoji. Na primer, ne možemo uneti ocenu u sistem a da ne kažemo kom učeniku pripada. Ako bi to bilo dozvoljeno, imali bismo "sirotčad" u bazi, odnosno ocene koje ne pripadaju nikome, što bi bilo besmisleno.
+Opcionalnost ima direktne posledice na implementaciju baze. Ako je veza obavezna, to znači da prilikom unosa podataka moramo obezbediti da ta veza postoji. Na primer, ne možemo uneti ocenu u sistem a da ne kažemo kom učeniku pripada. Ako bi to bilo dozvoljeno, imali bismo odnosno ocene koje ne pripadaju nikome, što bi bilo besmisleno.
 
 Sa druge strane, ako je veza opciona, sistem mora biti spreman da neka pojava nema tu vezu. Na primer, novi profesor koji je upravo zaposlen možda još ne predaje nijedan predmet. Sistem mora da dozvoli da takav profesor postoji u bazi bez predmeta.
 
